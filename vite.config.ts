@@ -219,6 +219,15 @@ export default defineConfig({
   build: {
     outDir: path.resolve(import.meta.dirname, "dist/public"),
     emptyOutDir: true,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes("node_modules/recharts")) return "charts";
+          if (id.includes("node_modules/lucide-react")) return "icons";
+          if (id.includes("node_modules/react-dom") || id.includes("node_modules/react/")) return "react-vendor";
+        },
+      },
+    },
   },
   server: {
     port: 3000,

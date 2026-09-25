@@ -1,0 +1,119 @@
+export type PageId = "home" | "workouts" | "editor" | "library" | "favorites" | "history" | "calendar" | "evolution" | "profile" | "settings" | "runner";
+export type DayKey = "seg" | "ter" | "qua" | "qui" | "sex" | "sab" | "dom";
+export type TrainingMethod = "Repetições" | "Tempo" | "Falha" | "Até a falha" | "Isometria";
+export type Goal = "Hipertrofia" | "Emagrecimento" | "Força" | "Condicionamento" | "Manutenção";
+
+export interface Account {
+  id: string;
+  email: string;
+  name: string;
+}
+
+export interface ExerciseDefinition {
+  id: string;
+  name: string;
+  muscle: string;
+  equipment: string;
+  description: string;
+  instructions: string;
+  defaultSets: number;
+  defaultReps: string;
+  defaultRestSeconds: number;
+  imageUrl?: string;
+  custom?: boolean;
+}
+
+export interface ExerciseSet {
+  id: string;
+  reps: string;
+  weight: string;
+  method: TrainingMethod;
+  seconds: number;
+}
+
+export interface WorkoutExercise extends ExerciseDefinition {
+  sets: ExerciseSet[];
+  restSeconds: number;
+  note: string;
+}
+
+export interface Workout {
+  id: string;
+  title: string;
+  description: string;
+  days: DayKey[];
+  color: string;
+  exercises: WorkoutExercise[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Profile {
+  name: string;
+  email: string;
+  age: string;
+  heightCm: string;
+  weightKg: string;
+  goal: Goal;
+  avatarDataUrl?: string;
+}
+
+export interface Settings {
+  theme: "light" | "dark";
+  sound: boolean;
+  vibration: boolean;
+  restSeconds: number;
+  weightUnit: "kg" | "lb";
+  notifications: boolean;
+}
+
+export interface PerformedSet {
+  exerciseIndex: number;
+  setIndex: number;
+  exerciseName: string;
+  reps: string;
+  weight: string;
+  method: TrainingMethod;
+  seconds: number;
+  completedAt: string;
+}
+
+export interface WorkoutHistory {
+  id: string;
+  workoutId: string;
+  title: string;
+  startedAt: string;
+  finishedAt: string;
+  durationSeconds: number;
+  performed: PerformedSet[];
+  volumeKg: number;
+  weightUnit?: "kg" | "lb";
+}
+
+export interface ActiveWorkout {
+  workoutId: string;
+  startedAt: string;
+  exerciseIndex: number;
+  setIndex: number;
+  performed: PerformedSet[];
+}
+
+export interface BellaData {
+  version: 1;
+  profile: Profile;
+  workouts: Workout[];
+  customExercises: ExerciseDefinition[];
+  favorites: string[];
+  schedule: Record<DayKey, string | null>;
+  history: WorkoutHistory[];
+  settings: Settings;
+  activeWorkout: ActiveWorkout | null;
+}
+
+export interface BackupFile {
+  format: "bella-fit-backup";
+  version: 1;
+  exportedAt: string;
+  user: { name: string; email: string };
+  data: BellaData;
+}
