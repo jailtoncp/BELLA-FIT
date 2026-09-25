@@ -1,4 +1,6 @@
-export const EXERCISE_IMAGES: Record<string, string> = {
+import { exerciseImageUrl } from "./assetPaths";
+
+const manuscriptImages: Record<string, string> = {
   "hip-thrust": "/manus-storage/hip-thrust_80b089d1.gif",
   "elevacao-pelvica": "/manus-storage/elevacao-pelvica_ac7b41a5.gif",
   "glute-bridge": "/manus-storage/glute-bridge_d7364c5f.gif",
@@ -34,3 +36,7 @@ export const EXERCISE_IMAGES: Record<string, string> = {
   prancha: "/manus-storage/prancha_ab4633a6.gif",
   "elevacao-pernas": "/manus-storage/elevacao-pernas_2059e679.gif",
 };
+
+export const EXERCISE_IMAGES: Record<string, string> = Object.fromEntries(
+  Object.entries(manuscriptImages).map(([key, url]) => [key, exerciseImageUrl(key, url)]),
+);

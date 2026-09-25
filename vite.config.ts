@@ -12,6 +12,7 @@ import { vitePluginManusRuntime } from "vite-plugin-manus-runtime";
 // =============================================================================
 
 const PROJECT_ROOT = import.meta.dirname;
+const GITHUB_PAGES_BUILD = process.env.DEPLOY_TARGET === "github-pages";
 const LOG_DIR = path.join(PROJECT_ROOT, ".manus-logs");
 const MAX_LOG_SIZE_BYTES = 1 * 1024 * 1024; // 1MB per log file
 const TRIM_TARGET_BYTES = Math.floor(MAX_LOG_SIZE_BYTES * 0.6); // Trim to 60% to avoid constant re-trimming
@@ -203,9 +204,21 @@ function vitePluginStorageProxy(): Plugin {
   };
 }
 
-const plugins = [react(), tailwindcss(), jsxLocPlugin(), vitePluginManusRuntime(), vitePluginManusDebugCollector(), vitePluginStorageProxy()];
+const githubPagesAssetsPlugin: Plugin = {
+  name: "bella-fit-github-pages-assets",
+  closeBundle() {
+    if (!GITHUB_PAGES_BUILD) return;
+    const source = path.join(PROJECT_ROOT, "github-pages-assets");
+    const destination = path.join(PROJECT_ROOT, "dist", "public", "media");
+    if (!fs.existsSync(source)) throw new Error("Missing github-pages-assets for GitHub Pages build");
+    fs.cpSync(source, destination, { recursive: true });
+  },
+};
+
+const plugins = [react(), tailwindcss(), jsxLocPlugin(), vitePluginManusRuntime(), vitePluginManusDebugCollector(), vitePluginStorageProxy(), githubPagesAssetsPlugin];
 
 export default defineConfig({
+  base: GITHUB_PAGES_BUILD ? "/BELLA-FIT/" : "/",
   plugins,
   resolve: {
     alias: {

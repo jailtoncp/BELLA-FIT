@@ -2,6 +2,7 @@ import { useState } from "react";
 import { ArrowRight, Check, Dumbbell, Heart, Sparkles } from "lucide-react";
 import { Button, Field } from "./common";
 import type { Account } from "../types";
+import { HERO_IMAGE_URL } from "../lib/assetPaths";
 
 type AuthApi = { login: (email: string, password: string) => Promise<void>; register: (name: string, email: string, password: string) => Promise<void>; resetPassword: (email: string, password: string) => Promise<void> };
 
@@ -30,7 +31,7 @@ export default function AuthScreen({ auth }: { auth: AuthApi }) {
 
   return <main className="auth-shell">
     <section className="auth-visual" aria-label="Bella Fit">
-      <div className="auth-visual-image" />
+      <div className="auth-visual-image" style={{ backgroundImage: `url("${HERO_IMAGE_URL}")` }} />
       <div className="auth-brand"><span className="brand-mark"><Heart size={19} fill="currentColor" /></span><span>BELLA <i>FIT</i></span></div>
       <div className="auth-copy"><span className="auth-overline"><Sparkles size={14} /> SUA JORNADA, DO SEU JEITO</span><h1>Seu treino.<br /><em>Seu ritmo.</em><br />Sua evolução.</h1><p>Uma rotina de força construída em torno de você — um treino de cada vez.</p><div className="auth-proof"><span><Dumbbell size={17} /></span><div><strong>Feito para a vida real</strong><small>Seus dados ficam salvos neste dispositivo.</small></div></div></div>
       <div className="auth-bottom-note">MOVE COM INTENÇÃO · EVOLUA COM LEVEZA</div>

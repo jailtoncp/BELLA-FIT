@@ -5,40 +5,35 @@ Aplicativo web instalável para montar rotinas, registrar sessões de treino e a
 ## Funcionalidades
 
 - Cadastro, login, logout e redefinição local de senha.
-- Treinos iniciais e CRUD de rotinas e movimentos; exercícios personalizados, favoritos, pesquisa e séries independentes.
-- Agenda semanal vinculada às rotinas.
-- Execução de treino com registro de carga/repetições, cronômetro de descanso, som e vibração configuráveis.
-- Histórico, calendário e gráficos derivados dos registros do perfil.
-- Perfil, tema, unidade kg/lb, backup JSON, restauração e exclusão com confirmação.
-- PWA com manifesto, ícones, cache do app e demonstrações para acesso offline depois da instalação/carregamento do cache.
+- Rotinas sem limite, exercícios personalizados, biblioteca pesquisável, favoritos e edição de séries.
+- Agenda semanal ligada às rotinas; execução com timer de descanso; histórico, calendário e evolução.
+- Perfil, tema, unidade kg/lb, backup/restauração e ações de conta com confirmação.
+- PWA com cache offline, lembrete local diário e 34 GIFs demonstrativos.
 
-## Desenvolvimento
+## Desenvolvimento local
 
-Requer Node.js 22 e pnpm.
+Requer Node.js 22 e pnpm 10.
 
 ```bash
-pnpm install
+pnpm install --frozen-lockfile
 pnpm dev
-```
-
-Verificações antes de publicar:
-
-```bash
 pnpm check
 pnpm test
 pnpm build
 ```
 
-O build gera o frontend em `dist/public`. A hospedagem deve servir HTTPS e redirecionar rotas de navegação para `index.html`.
+O preview Manus lê imagens do armazenamento gerenciado pelo Manus. O build público do Pages é selecionado com `DEPLOY_TARGET=github-pages` e grava o frontend em `dist/public`, incluindo os assets de `github-pages-assets/` em `dist/public/media/`.
+
+## GitHub Pages
+
+O arquivo `.github/workflows/deploy.yml` instala dependências pelo lockfile, roda verificação de tipos e testes, compila com o base path `/BELLA-FIT/` e publica `dist/public` após cada atualização de `main`. Em **Settings → Pages**, a origem de publicação deve estar definida como **GitHub Actions** (não Branch/Jekyll).
 
 ## Dados e privacidade
 
-O app não possui backend de conta nem sincronização na nuvem. Credenciais, perfil, rotinas, preferências e histórico ficam no `localStorage` do navegador e são separados por perfil local. As senhas são armazenadas como hashes PBKDF2 com salt aleatório quando o navegador oferece Web Crypto. A redefinição de senha só alcança uma conta criada **neste mesmo navegador/dispositivo**. Exporte backups regulares: limpar os dados do navegador pode apagar os registros.
+O app não tem backend de conta nem sincronização na nuvem. Credenciais, perfil, rotinas, preferências e histórico ficam no `localStorage` deste navegador, separados por perfil local. Senhas são armazenadas como hashes PBKDF2 com salt aleatório quando Web Crypto está disponível. Redefinição só alcança contas criadas neste mesmo dispositivo. Faça backups regulares: limpar dados do navegador pode apagar registros.
 
-A opção de lembrete usa notificações locais quando o app é aberto e há treino programado para o dia. Como esta versão não tem serviço push/backend, ela não agenda avisos enquanto o app estiver fechado.
+O lembrete notifica uma vez ao abrir o app quando há treino agendado para hoje e nenhuma sessão concluída no dia. Não há serviço push/backend para avisos enquanto o app estiver fechado.
 
-## PWA e mídia
+## Mídia
 
-O service worker guarda o shell, os ícones e as demonstrações visuais para uso offline. Os arquivos de mídia do preview atual são servidos pelo armazenamento gerenciado do WebDev em `/manus-storage/`; essa origem de mídia precisa ser mantida ou substituída ao mover a implantação para outro provedor.
-
-As demonstrações derivadas do Free Exercise DB estão documentadas em [`THIRD_PARTY_NOTICES.md`](./THIRD_PARTY_NOTICES.md).
+Os GIFs locais do Pages foram derivados do [Free Exercise DB](https://github.com/yuhonas/free-exercise-db), sob a licença declarada pelo projeto de origem. Veja [`THIRD_PARTY_NOTICES.md`](./THIRD_PARTY_NOTICES.md).

@@ -3,6 +3,7 @@ import { ArrowDownRight, ArrowRight, ArrowUpRight, CalendarCheck2, ChartNoAxesCo
 import type { BellaData, PageId, Workout } from "../types";
 import { DAYS, makeId } from "../lib/catalog";
 import { Card, Button, PageHeading, Pill } from "../components/common";
+import { HERO_IMAGE_URL } from "../lib/assetPaths";
 
 function mondayStart(date: Date): Date { const d = new Date(date); d.setHours(0,0,0,0); const shift = (d.getDay() + 6) % 7; d.setDate(d.getDate() - shift); return d; }
 function dateKey(date: Date): string { return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,"0")}-${String(date.getDate()).padStart(2,"0")}`; }
@@ -33,7 +34,7 @@ export default function Dashboard({ data, onNavigate, onStart, onCreate }: { dat
     <PageHeading eyebrow={`${greeting.toUpperCase()} · ${friendlyDate(new Date()).toUpperCase()}`} title={<>{greeting}, <em>{data.profile.name.split(" ")[0] || "bella"}</em>.</>} description="Seu espaço para se sentir mais forte, um treino de cada vez." actions={<div className="heading-mood"><span className="mood-spark"><Sparkles size={18} /></span><span>FOCO NO SEU PROCESSO</span></div>} />
     <div className="dashboard-grid">
       <section className="today-feature" aria-label="Treino recomendado">
-        <div className="today-photo" />
+        <div className="today-photo" style={{ backgroundImage: `url("${HERO_IMAGE_URL}")` }} />
         <div className="today-overlay" />
         <div className="today-content">
           <div className="today-topline"><span className="today-kicker"><span className="live-dot" /> {todayWorkout ? "ROTINA NA SUA AGENDA" : "UM DIA NO SEU RITMO"}</span>{todayWorkout && <span className="today-chip">{todayWorkout.title}</span>}</div>

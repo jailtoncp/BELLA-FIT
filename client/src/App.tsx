@@ -19,6 +19,7 @@ import { useBellaFit } from "./hooks/useBellaFit";
 import { createInitialData, validateBackup } from "./lib/storageService";
 import { assignScheduledWorkout, duplicateWorkout as createWorkoutCopy, updateWorkoutSchedule } from "./lib/programService";
 import { getDailyWorkoutReminder, reminderStorageKey } from "./lib/notificationService";
+import { appAssetUrl } from "./lib/assetPaths";
 import { EXERCISE_CATALOG, makeId, WORKOUT_COLORS } from "./lib/catalog";
 import type { ActiveWorkout, BellaData, DayKey, ExerciseDefinition, PageId, PerformedSet, Workout } from "./types";
 
@@ -72,12 +73,12 @@ export default function App() {
           const registration = await navigator.serviceWorker.ready;
           await registration.showNotification("Bella Fit · seu treino de hoje", {
             body: `${workout.title}${workout.description ? ` · ${workout.description}` : ""} está na sua agenda. Comece no seu ritmo.`,
-            icon: "/icons/bella-fit-192.png",
-            badge: "/icons/bella-fit-192.png",
+            icon: appAssetUrl("icons/bella-fit-192.png"),
+            badge: appAssetUrl("icons/bella-fit-192.png"),
             tag: `bella-fit-${key}`,
           });
         } else {
-          new Notification("Bella Fit · seu treino de hoje", { body: `${workout.title} está na sua agenda. Comece no seu ritmo.`, icon: "/icons/bella-fit-192.png" });
+          new Notification("Bella Fit · seu treino de hoje", { body: `${workout.title} está na sua agenda. Comece no seu ritmo.`, icon: appAssetUrl("icons/bella-fit-192.png") });
         }
         if (mounted) localStorage.setItem(key, new Date().toISOString());
       } catch {

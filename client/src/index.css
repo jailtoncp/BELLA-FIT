@@ -345,7 +345,7 @@ kbd { padding: 2px 5px; border: 1px solid var(--line); border-radius: 5px; color
 .dashboard-grid { display: grid; grid-template-columns: minmax(0,1.55fr) minmax(290px,.8fr); gap: 17px; }
 .today-feature { position: relative; min-height: 315px; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; padding: 21px 24px 16px; border-radius: 18px; color: #fff; background: #664654; box-shadow: var(--shadow-soft); }
 .today-photo, .today-overlay { position: absolute; inset: 0; }
-.today-photo { background: center 43% / cover no-repeat url("/manus-storage/bella-fit-training-hero_303e3ce8.jpg"); transform: scale(1.01); }
+.today-photo { background: center 43% / cover no-repeat; transform: scale(1.01); }
 .today-overlay { background: linear-gradient(90deg,rgba(38,24,31,.74) 0%,rgba(52,31,41,.56) 43%,rgba(47,28,39,.13) 100%),linear-gradient(0deg,rgba(28,17,22,.46),transparent 35%); }
 .today-content, .today-topline, .today-foot { position: relative; z-index: 1; }
 .today-topline { display: flex; align-items: center; justify-content: space-between; }
@@ -424,7 +424,7 @@ kbd { padding: 2px 5px; border: 1px solid var(--line); border-radius: 5px; color
 /* Auth */
 .auth-shell { min-height: 100vh; display: grid; grid-template-columns: minmax(360px,1fr) minmax(410px,.88fr); background: var(--white); }
 .auth-visual { position: relative; min-height: 100vh; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; padding: clamp(27px,5vw,65px); box-sizing: border-box; color: #fff; background: #59434b; }
-.auth-visual-image { position: absolute; inset: 0; background: center / cover no-repeat url("/manus-storage/bella-fit-training-hero_303e3ce8.jpg"); filter: saturate(.85); transform: scale(1.02); }
+.auth-visual-image { position: absolute; inset: 0; background: center / cover no-repeat; filter: saturate(.85); transform: scale(1.02); }
 .auth-visual::after { content: ""; position: absolute; inset: 0; background: linear-gradient(130deg,rgba(52,29,40,.68),rgba(94,49,70,.32) 58%,rgba(38,28,31,.67)),linear-gradient(0deg,rgba(34,22,28,.34),transparent 65%); }
 .auth-brand, .auth-copy, .auth-bottom-note { position: relative; z-index: 1; }
 .auth-brand { color: #fff; }

@@ -4,7 +4,8 @@ import "./index.css";
 
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
-    navigator.serviceWorker.register("/sw.js", { scope: "/" }).catch((error) => console.warn("Bella Fit: não foi possível registrar o modo offline", error));
+    const baseUrl = import.meta.env.BASE_URL;
+    navigator.serviceWorker.register(`${baseUrl}sw.js`, { scope: baseUrl }).catch((error) => console.warn("Bella Fit: não foi possível registrar o modo offline", error));
   });
 }
 
