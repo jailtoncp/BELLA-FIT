@@ -176,7 +176,7 @@ export default function App() {
   else if (page === "workouts") pageContent = <WorkoutsPage data={data} onCreate={createWorkout} onEdit={(workout) => { setEditingId(workout.id); setPage("editor"); }} onDuplicate={duplicateWorkout} onDelete={setDeleteTarget} onStart={startWorkout} />;
   else if (page === "editor" && currentWorkout) pageContent = <WorkoutEditor key={currentWorkout.id} workout={currentWorkout} data={data} onChange={updateWorkout} onBack={() => setPage("workouts")} onFavorite={favorite} />;
   else if (page === "library") pageContent = <ExerciseLibraryPage data={data} accountId={account.id} onFavorite={favorite} workouts={data.workouts} onAddToWorkout={addExerciseToWorkout} onCreateWorkout={createWorkout} />;
-  else if (page === "taf") pageContent = <TafPage data={data} onSave={addTafAttempt} />;
+  else if (page === "taf") pageContent = <TafPage data={data} accountId={account.id} onSave={addTafAttempt} />;
   else if (page === "favorites") pageContent = <FavoritesPage data={data} onFavorite={favorite} />;
   else if (page === "history") pageContent = <HistoryPage data={data} />;
   else if (page === "calendar") pageContent = <CalendarPage data={data} onAssign={setSchedule} />;

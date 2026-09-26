@@ -1325,6 +1325,11 @@ kbd { padding: 2px 5px; border: 1px solid var(--line); border-radius: 5px; color
 .taf-demo-credit { position: absolute; z-index: 2; right: 7px; bottom: 6px; max-width: calc(100% - 14px); padding: 4px 6px; border-radius: 5px; color: #51464b; background: rgba(255,253,252,.9); font-size: 7px; text-decoration: none; }
 .taf-demo-credit:hover { text-decoration: underline; }
 .taf-demo-caption { position: absolute; z-index: 1; right: 8px; bottom: 8px; left: 8px; color: #876c78; font-size: 8px; text-align: center; }
+.taf-gif-picker { position: absolute; z-index: 3; right: 8px; bottom: 8px; width: 29px; height: 29px; display: inline-grid; place-items: center; padding: 0; border: 1px solid rgba(255,255,255,.78); border-radius: 50%; color: #8c365b; background: rgba(255,253,252,.92); box-shadow: 0 2px 8px rgba(47,20,33,.16); backdrop-filter: blur(8px); cursor: pointer; transition: transform .16s var(--ease-out), background .16s var(--ease-out); }
+.taf-gif-picker:hover { background: #fff; }
+.taf-gif-picker:active { transform: scale(.97); }
+.taf-gif-picker:disabled { opacity: .72; cursor: wait; }
+.taf-gif-picker:focus-visible { outline: 2px solid var(--rose-deep); outline-offset: 2px; }
 .dark .taf-demo-caption { color: #c6acb8; }
 .taf-demo-vector { background: radial-gradient(ellipse at 55% 34%,#fff 0%,#fbf0f4 56%,#f2e7ec 100%); }
 .dark .taf-demo-vector { background: radial-gradient(ellipse at 55% 34%,#373039 0%,#30252d 56%,#281f26 100%); }

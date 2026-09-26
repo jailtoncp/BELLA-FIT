@@ -1,11 +1,12 @@
-import { useMemo, useState } from "react";
-import { Activity, CalendarDays, ClipboardCheck, Dumbbell, Footprints, Info, MapPin, Plus, Ruler, Timer, TrendingUp, Trophy, X } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Activity, CalendarDays, ClipboardCheck, Dumbbell, Footprints, Info, LoaderCircle, MapPin, Pencil, Plus, Ruler, Timer, TrendingUp, Trophy, X } from "lucide-react";
 import { CartesianGrid, Line, LineChart, ReferenceDot, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import type { BellaData, TafAttempt } from "../types";
 import { Button, Card, Field, Modal, PageHeading, Pill } from "../components/common";
 import { formatTafValue, getTafBest, getTafProgressPoints, TAF_EXERCISES, type TafDemoKind, type TafExercise } from "../lib/tafService";
 import { TAF_SOURCES } from "../lib/tafSources";
 import { TAF_MEDIA } from "../lib/tafMedia";
+import { loadExerciseGifs, saveExerciseGif, validateExerciseGif } from "../lib/exerciseGifStorage";
 
 function localDateInputValue() {
   const today = new Date();
@@ -66,18 +67,19 @@ function TafSchematic({ demo }: { demo: TafDemoKind }) {
   </svg>;
 }
 
-function DemoArt({ exercise }: { exercise: TafExercise }) {
+function DemoArt({ exercise, overrideUrl, onEdit, uploading }: { exercise: TafExercise; overrideUrl?: string; onEdit?: () => void; uploading?: boolean }) {
   const media = TAF_MEDIA[exercise.demo];
-  const src = demoImageUrl(exercise.demo);
-  if (src) return <div className="taf-demo"><picture><source media="(prefers-reduced-motion: reduce)" srcSet={demoPosterUrl(exercise.demo)} type="image/webp"/><img src={src} alt={`${media.kind === "original" ? "Animação esquemática" : "Demonstração animada"} de ${exercise.name}`} loading="lazy"/></picture><span className="taf-demo-tag"><Activity size={12}/> {media.kind === "original" ? "GIF ESQUEMÁTICO" : "DEMONSTRAÇÃO ANIMADA"}</span>{media.source && <a className="taf-demo-credit" href={media.source} target="_blank" rel="noreferrer">{media.credit}</a>}</div>;
+  const src = overrideUrl || demoImageUrl(exercise.demo);
+  if (src) return <div className="taf-demo"><picture>{!overrideUrl && <source media="(prefers-reduced-motion: reduce)" srcSet={demoPosterUrl(exercise.demo)} type="image/webp"/>}<img src={src} alt={`${overrideUrl ? "GIF personalizado" : media.kind === "original" ? "Animação esquemática" : "Demonstração animada"} de ${exercise.name}`} loading="lazy"/></picture><span className="taf-demo-tag"><Activity size={12}/> {overrideUrl ? "GIF PERSONALIZADO" : media.kind === "original" ? "GIF ESQUEMÁTICO" : "DEMONSTRAÇÃO ANIMADA"}</span>{media.source && !overrideUrl && <a className="taf-demo-credit" href={media.source} target="_blank" rel="noreferrer">{media.credit}</a>}{onEdit && <button type="button" className="taf-gif-picker" aria-label={`${overrideUrl ? "Trocar" : "Adicionar"} GIF de ${exercise.name}`} title={`${uploading ? "Salvando" : "Editar GIF"} de ${exercise.name}`} disabled={uploading} onClick={onEdit}>{uploading ? <LoaderCircle size={14}/> : <Pencil size={14}/>}</button>}</div>;
   return <div className={`taf-demo taf-demo-vector taf-demo-${exercise.demo}`} role="img" aria-label={`Ilustração esquemática de ${exercise.name}`}>
     <span className="taf-demo-tag"><Activity size={12}/> ILUSTRAÇÃO ESQUEMÁTICA</span>
     <TafSchematic demo={exercise.demo}/>
     <span className="taf-demo-caption">Movimento representativo · consulte o protocolo do edital</span>
+    {onEdit && <button type="button" className="taf-gif-picker" aria-label={`Adicionar GIF de ${exercise.name}`} title={`${uploading ? "Salvando" : "Adicionar GIF"} de ${exercise.name}`} disabled={uploading} onClick={onEdit}>{uploading ? <LoaderCircle size={14}/> : <Pencil size={14}/>}</button>}
   </div>;
 }
 
-export default function TafPage({ data, onSave }: { data: BellaData; onSave: (attempt: TafAttempt) => void }) {
+export default function TafPage({ data, accountId, onSave }: { data: BellaData; accountId: string; onSave: (attempt: TafAttempt) => void }) {
   const [category, setCategory] = useState("Todas");
   const [chartExerciseId, setChartExerciseId] = useState(TAF_EXERCISES[0].id);
   const [activeExercise, setActiveExercise] = useState<TafExercise | null>(null);
@@ -87,6 +89,11 @@ export default function TafPage({ data, onSave }: { data: BellaData; onSave: (at
   const [exam, setExam] = useState("");
   const [notes, setNotes] = useState("");
   const [formError, setFormError] = useState("");
+  const [gifUrls, setGifUrls] = useState<Record<string, string>>({});
+  const [gifUploading, setGifUploading] = useState<string | null>(null);
+  const [gifError, setGifError] = useState("");
+  const gifInputs = useRef<Record<string, HTMLInputElement | null>>({});
+  const objectUrls = useRef(new Set<string>());
   const attempts = data.tafAttempts ?? [];
   const chartExercise = TAF_EXERCISES.find((exercise) => exercise.id === chartExerciseId) ?? TAF_EXERCISES[0];
   const chartPoints = useMemo(() => getTafProgressPoints(attempts, chartExercise), [attempts, chartExercise]);
@@ -105,6 +112,51 @@ export default function TafPage({ data, onSave }: { data: BellaData; onSave: (at
   const latest = attempts[0];
   const attemptExercise = TAF_EXERCISES.find((exercise) => exercise.id === latest?.exerciseId);
   const recentAttempts = attempts.slice(0, 8);
+
+  useEffect(() => {
+    let cancelled = false;
+    setGifUrls({});
+    setGifError("");
+    void loadExerciseGifs(accountId).then((saved) => {
+      if (cancelled) return;
+      const urls = Object.fromEntries(Object.entries(saved).map(([id, blob]) => {
+        const url = URL.createObjectURL(blob);
+        objectUrls.current.add(url);
+        return [id, url];
+      }));
+      setGifUrls(urls);
+    }).catch((error: unknown) => {
+      if (!cancelled) setGifError(error instanceof Error ? error.message : "Não foi possível carregar seus GIFs locais.");
+    });
+    return () => {
+      cancelled = true;
+      for (const url of objectUrls.current) URL.revokeObjectURL(url);
+      objectUrls.current.clear();
+    };
+  }, [accountId]);
+
+  async function uploadGif(exercise: TafExercise, file?: File) {
+    if (!file) return;
+    setGifUploading(exercise.id);
+    setGifError("");
+    try {
+      await validateExerciseGif(file);
+      await saveExerciseGif(accountId, exercise.id, file);
+      const nextUrl = URL.createObjectURL(file);
+      objectUrls.current.add(nextUrl);
+      setGifUrls((current) => {
+        const previous = current[exercise.id];
+        if (previous) { URL.revokeObjectURL(previous); objectUrls.current.delete(previous); }
+        return { ...current, [exercise.id]: nextUrl };
+      });
+    } catch (error) {
+      setGifError(error instanceof Error ? error.message : "Não foi possível salvar esse GIF.");
+    } finally {
+      setGifUploading(null);
+      const input = gifInputs.current[exercise.id];
+      if (input) input.value = "";
+    }
+  }
 
   function openExercise(exercise: TafExercise) {
     setActiveExercise(exercise); setRecording(false); setValue(""); setMeasuredAt(localDateInputValue()); setExam(""); setNotes(""); setFormError("");
@@ -149,12 +201,13 @@ export default function TafPage({ data, onSave }: { data: BellaData; onSave: (at
       </div> : <div className="taf-progress-empty"><span><TrendingUp size={21}/></span><div><strong>Seu gráfico começa com a primeira marca.</strong><p>Registre um resultado na modalidade selecionada para visualizar sua evolução ao longo do tempo.</p></div></div>}
       {chartPoints.length > 0 && <p className="taf-progress-note"><Info size={13}/>{chartExercise.higherIsBetter ? "Valores maiores indicam marcas mais altas nesta modalidade." : "Nesta prova de tempo, a linha descendo representa uma marca melhor."}{chartPoints.length === 1 && " Registre outra tentativa para comparar seu progresso."}</p>}
     </section>
-    <section className="taf-library" aria-labelledby="taf-library-title"><div className="taf-section-heading"><div><span className="eyebrow">PROVAS E EXERCÍCIOS</span><h2 id="taf-library-title">Biblioteca TAF</h2></div><Field label="FILTRAR MODALIDADE"><select value={category} onChange={(event) => setCategory(event.target.value)}>{categories.map((item) => <option key={item}>{item}</option>)}</select></Field></div>
+    <section className="taf-library" aria-labelledby="taf-library-title"><div className="taf-section-heading"><div><span className="eyebrow">PROVAS E EXERCÍCIOS</span><h2 id="taf-library-title">Biblioteca TAF</h2></div><Field label="FILTRAR MODALIDADE"><select value={category} onChange={(event) => setCategory(event.target.value)}>{categories.map((item) => <option key={item}>{item}</option>)}</select></Field></div>{gifError && <div className="exercise-gif-storage-error" role="alert">{gifError}</div>}
       <div className="taf-exercise-grid">{visibleExercises.map((exercise) => {
         const personalBest = getTafBest(attempts, exercise);
         const last = attempts.find((attempt) => attempt.exerciseId === exercise.id);
         return <Card className="taf-exercise-card" key={exercise.id}>
-          <DemoArt exercise={exercise}/>
+          <DemoArt exercise={exercise} overrideUrl={gifUrls[exercise.id]} uploading={gifUploading === exercise.id} onEdit={() => gifInputs.current[exercise.id]?.click()}/>
+          <input ref={(element) => { gifInputs.current[exercise.id] = element; }} type="file" accept="image/gif,.gif" aria-label={`Escolher GIF para ${exercise.name}`} className="exercise-gif-input" onChange={(event) => void uploadGif(exercise, event.currentTarget.files?.[0])}/>
           <div className="taf-card-copy"><Pill tone="neutral">{exercise.category.toUpperCase()}</Pill><h3>{exercise.name}</h3><p>{exercise.purpose}</p><div className="taf-card-muscles"><Dumbbell size={14}/><span>{exercise.muscles}</span></div></div>
           <div className="taf-card-marks"><div><span className="eyebrow"><Trophy size={12}/> MELHOR MARCA</span><strong>{personalBest === null ? "—" : formatTafValue(personalBest, exercise.defaultUnit)}</strong></div>{last && <div className="taf-last-mark"><span>Última · {dateLabel(last.measuredAt)}</span><b>{formatTafValue(last.value, last.unit)}</b></div>}</div>
           <div className="taf-card-footer"><span className="taf-metric-note"><Ruler size={13}/>{exercise.metricLabel}</span><Button onClick={() => openExercise(exercise)}><Plus size={15}/> REGISTRAR MARCA</Button></div>
