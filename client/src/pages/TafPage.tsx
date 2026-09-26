@@ -4,11 +4,7 @@ import type { BellaData, TafAttempt } from "../types";
 import { Button, Card, Field, Modal, PageHeading, Pill } from "../components/common";
 import { formatTafValue, getTafBest, TAF_EXERCISES, type TafDemoKind, type TafExercise } from "../lib/tafService";
 import { TAF_SOURCES } from "../lib/tafSources";
-
-const MEDIA = {
-  "distance-run": { file: "running.gif", storageFile: "running-optimized_f290e3b5.gif", source: "https://commons.wikimedia.org/wiki/File:Running.gif", credit: "Fengalon · domínio público" },
-  "pull-up": { file: "pull-up.gif", storageFile: "pull-up_d3c4a899.gif", source: "https://commons.wikimedia.org/wiki/File:Pullup.gif", credit: "Extremistpullup · CC BY-SA 3.0" },
-} as const;
+import { TAF_MEDIA } from "../lib/tafMedia";
 
 function localDateInputValue() {
   const today = new Date();
@@ -16,9 +12,13 @@ function localDateInputValue() {
 }
 
 function demoImageUrl(demo: TafDemoKind) {
-  const asset = MEDIA[demo as keyof typeof MEDIA];
-  if (!asset) return "";
+  const asset = TAF_MEDIA[demo];
   return import.meta.env.BASE_URL === "/BELLA-FIT/" ? `${import.meta.env.BASE_URL}media/taf/${asset.file}` : `/manus-storage/${asset.storageFile}`;
+}
+
+function demoPosterUrl(demo: TafDemoKind) {
+  const asset = TAF_MEDIA[demo];
+  return import.meta.env.BASE_URL === "/BELLA-FIT/" ? `${import.meta.env.BASE_URL}media/taf/${asset.posterFile}` : `/manus-storage/${asset.posterStorageFile}`;
 }
 
 function dateLabel(value: string) {
@@ -66,9 +66,9 @@ function TafSchematic({ demo }: { demo: TafDemoKind }) {
 }
 
 function DemoArt({ exercise }: { exercise: TafExercise }) {
-  const media = MEDIA[exercise.demo as keyof typeof MEDIA];
+  const media = TAF_MEDIA[exercise.demo];
   const src = demoImageUrl(exercise.demo);
-  if (media && src) return <div className="taf-demo"><img src={src} alt={`Ilustração em movimento de ${exercise.name}`} loading="lazy"/><span className="taf-demo-tag"><Activity size={12}/> DEMONSTRAÇÃO</span><a className="taf-demo-credit" href={media.source} target="_blank" rel="noreferrer">{media.credit}</a></div>;
+  if (src) return <div className="taf-demo"><picture><source media="(prefers-reduced-motion: reduce)" srcSet={demoPosterUrl(exercise.demo)} type="image/webp"/><img src={src} alt={`${media.kind === "original" ? "Animação esquemática" : "Demonstração animada"} de ${exercise.name}`} loading="lazy"/></picture><span className="taf-demo-tag"><Activity size={12}/> {media.kind === "original" ? "GIF ESQUEMÁTICO" : "DEMONSTRAÇÃO ANIMADA"}</span>{media.source && <a className="taf-demo-credit" href={media.source} target="_blank" rel="noreferrer">{media.credit}</a>}</div>;
   return <div className={`taf-demo taf-demo-vector taf-demo-${exercise.demo}`} role="img" aria-label={`Ilustração esquemática de ${exercise.name}`}>
     <span className="taf-demo-tag"><Activity size={12}/> ILUSTRAÇÃO ESQUEMÁTICA</span>
     <TafSchematic demo={exercise.demo}/>
