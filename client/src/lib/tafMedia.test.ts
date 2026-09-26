@@ -13,9 +13,11 @@ describe("TAF animated demonstrations", () => {
     expect(Object.values(TAF_MEDIA).every((asset) => asset.posterFile.endsWith(".webp") && asset.posterStorageFile.endsWith(".webp"))).toBe(true);
   });
 
-  it("keeps source and creator credit on the two externally sourced GIFs", () => {
+  it("keeps a verified Commons source link and visible credit on every sourced GIF", () => {
     const sourced = Object.values(TAF_MEDIA).filter((asset) => asset.kind === "sourced");
-    expect(sourced).toHaveLength(2);
+    expect(sourced).toHaveLength(4);
     expect(sourced.every((asset) => asset.source?.startsWith("https://commons.wikimedia.org/") && asset.credit)).toBe(true);
+    expect(TAF_MEDIA.jump.file).toBe("jump-real.gif");
+    expect(TAF_MEDIA["push-up"].file).toBe("push-up-real.gif");
   });
 });
