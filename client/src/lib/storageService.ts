@@ -49,6 +49,7 @@ export function createInitialData(name: string, email: string): BellaData {
     history: [],
     settings: { theme: "light", sound: false, vibration: true, restSeconds: 90, weightUnit: "kg", notifications: false },
     activeWorkout: null,
+    tafAttempts: [],
   };
 }
 
@@ -103,7 +104,7 @@ export function deleteAccount(account: Account): void {
 export function loadData(account: Account): BellaData {
   const data = parseJson<BellaData | null>(localStorage.getItem(storageKey(account.id)), null);
   if (!data || data.version !== 1 || !data.profile || !Array.isArray(data.workouts)) return createInitialData(account.name, account.email);
-  return data;
+  return { ...data, tafAttempts: Array.isArray(data.tafAttempts) ? data.tafAttempts : [] };
 }
 export function saveData(account: Account, data: BellaData): void {
   localStorage.setItem(storageKey(account.id), JSON.stringify(data));
@@ -119,6 +120,7 @@ export function validateBackup(value: unknown): value is BackupFile {
   if (!Array.isArray(data.workouts) || !Array.isArray(data.customExercises) || !Array.isArray(data.favorites) || !Array.isArray(data.history)) return false;
   if (!data.profile || typeof data.profile.name !== "string" || typeof data.profile.email !== "string") return false;
   if (!data.schedule || typeof data.schedule !== "object" || !data.settings || typeof data.settings !== "object") return false;
+  if ("tafAttempts" in data && (!Array.isArray(data.tafAttempts) || data.tafAttempts.some((attempt) => !attempt || typeof attempt.id !== "string" || typeof attempt.exerciseId !== "string" || typeof attempt.value !== "number" || !Number.isFinite(attempt.value) || typeof attempt.measuredAt !== "string" || !["reps", "m", "cm", "s"].includes(attempt.unit)))) return false;
   if (data.workouts.some((workout) => !workout || typeof workout.id !== "string" || typeof workout.title !== "string" || !Array.isArray(workout.exercises) || workout.exercises.some((exercise) => !exercise || typeof exercise.name !== "string" || !Array.isArray(exercise.sets) || exercise.sets.length > 10 || exercise.sets.some((set) => !set || typeof set.reps !== "string" || typeof set.weight !== "string")))) return false;
   if (data.history.some((session) => !session || typeof session.id !== "string" || !Array.isArray(session.performed) || typeof session.finishedAt !== "string")) return false;
   return true;

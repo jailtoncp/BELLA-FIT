@@ -1,12 +1,13 @@
 import type { ReactNode } from "react";
 import { useState } from "react";
-import { Activity, CalendarDays, ChartNoAxesColumnIncreasing, ChevronDown, CircleHelp, Dumbbell, Heart, History, House, LogOut, Menu, Plus, Search, Settings, UserRound, X } from "lucide-react";
+import { Activity, CalendarDays, ChartNoAxesColumnIncreasing, ChevronDown, CircleHelp, ClipboardList, Dumbbell, Heart, History, House, LogOut, Menu, Plus, Search, Settings, UserRound, X } from "lucide-react";
 import type { ExerciseDefinition, PageId } from "../types";
 
 const items: Array<{ id: PageId; label: string; icon: typeof House; mobile?: boolean }> = [
   { id: "home", label: "Início", icon: House, mobile: true },
   { id: "workouts", label: "Meus treinos", icon: Dumbbell, mobile: true },
   { id: "library", label: "Exercícios", icon: Activity, mobile: true },
+  { id: "taf", label: "TAF", icon: ClipboardList, mobile: true },
   { id: "evolution", label: "Evolução", icon: ChartNoAxesColumnIncreasing, mobile: true },
   { id: "calendar", label: "Calendário", icon: CalendarDays },
   { id: "history", label: "Histórico", icon: History },

@@ -64,6 +64,22 @@ describe("Bella Fit local account storage", () => {
     expect((await loginAccount(account.email, "updated-pass-6")).id).toBe(account.id);
   });
 
+  it("migrates existing local data and backups that predate TAF tracking", async () => {
+    const account = await registerAccount("Legacy", "legacy@example.com", "strong-pass-8");
+    const key = `bella-fit:data:v1:${account.id}`;
+    const legacyData = JSON.parse(localStorage.getItem(key)!) as Record<string, unknown>;
+    delete legacyData.tafAttempts;
+    localStorage.setItem(key, JSON.stringify(legacyData));
+
+    expect(loadData(account).tafAttempts).toEqual([]);
+    const backup = makeBackup(account, loadData(account));
+    delete (backup.data as Partial<typeof backup.data>).tafAttempts;
+    expect(validateBackup(backup)).toBe(true);
+
+    const malformed = { ...backup, data: { ...backup.data, tafAttempts: [{ id: "broken" }] } };
+    expect(validateBackup(malformed)).toBe(false);
+  });
+
   it("preserves the technical purpose and primary/secondary muscles of personal exercises", async () => {
     const account = await registerAccount("Fabi", "fabi@example.com", "strong-pass-7");
     const data = loadData(account);

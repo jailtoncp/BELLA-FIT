@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { Activity, Dumbbell, Filter, Heart, Plus, Search, Sparkles, X } from "lucide-react";
 import type { BellaData, ExerciseDefinition, Workout } from "../types";
 import { EXERCISE_CATALOG, makeId } from "../lib/catalog";
@@ -7,7 +7,7 @@ import { Button, Card, EmptyState, Field, Modal, PageHeading, Pill } from "../co
 const muscles = ["Todos", ...Array.from(new Set(EXERCISE_CATALOG.map((exercise) => exercise.muscle)))];
 const equipment = ["Todos", ...Array.from(new Set(EXERCISE_CATALOG.map((exercise) => exercise.equipment)))];
 
-export function ExerciseBrowser({ data, selectedWorkout, onAdd, onFavorite, showHeader = true }: { data: BellaData; selectedWorkout?: Workout; onAdd?: (exercise: ExerciseDefinition) => void; onFavorite: (id: string) => void; showHeader?: boolean }) {
+export function ExerciseBrowser({ data, selectedWorkout, onAdd, onFavorite, showHeader = true, topContent }: { data: BellaData; selectedWorkout?: Workout; onAdd?: (exercise: ExerciseDefinition) => void; onFavorite: (id: string) => void; showHeader?: boolean; topContent?: ReactNode }) {
   const [query,setQuery] = useState("");
   const [muscle,setMuscle] = useState("Todos");
   const [equip,setEquip] = useState("Todos");
@@ -42,6 +42,7 @@ export function ExerciseBrowser({ data, selectedWorkout, onAdd, onFavorite, show
   }
   return <div className="library-browser">
     {showHeader && <PageHeading eyebrow="MOVIMENTO É LIBERDADE" title="Biblioteca de exercícios" description="Explore movimentos, salve seus favoritos e construa combinações do seu jeito." actions={<Button variant="secondary" onClick={() => setCustomOpen(true)}><Plus size={16}/> CRIAR EXERCÍCIO</Button>} />}
+    {topContent}
     <div className="library-controls"><label className="library-search"><Search size={17}/><input value={query} onChange={(event)=>setQuery(event.target.value)} placeholder="Busque por exercício, músculo ou equipamento"/><kbd>⌘ K</kbd></label><Field label="Grupo muscular"><select value={muscle} onChange={(event)=>setMuscle(event.target.value)}>{muscles.map((item)=><option key={item}>{item}</option>)}</select></Field><Field label="Equipamento"><select value={equip} onChange={(event)=>setEquip(event.target.value)}>{equipment.map((item)=><option key={item}>{item}</option>)}</select></Field></div>
     <div className="library-toolbar"><span><Filter size={14}/> {results.length} exercícios encontrados</span><div className="library-toolbar-actions"><button type="button" className={`favorite-filter ${onlyFavorites?"active":""}`} aria-pressed={onlyFavorites} onClick={()=>setOnlyFavorites((value)=>!value)}><Heart size={13} fill={onlyFavorites?"currentColor":"none"}/> SÓ FAVORITOS</button><button className="text-link" onClick={()=>{setQuery("");setMuscle("Todos");setEquip("Todos");setOnlyFavorites(false);}}>Limpar filtros <X size={13}/></button></div></div>
     {results.length ? <div className="exercise-library-grid">{results.map((exercise,index)=><Card className="exercise-tile" key={exercise.id} style={{animationDelay:`${Math.min(index,8)*25}ms`}}>
@@ -57,5 +58,6 @@ export function ExerciseBrowser({ data, selectedWorkout, onAdd, onFavorite, show
 export default function ExerciseLibraryPage({ data, onFavorite, workouts, onAddToWorkout, onCreateWorkout }: { data: BellaData; onFavorite: (id: string)=>void; workouts:Workout[]; onAddToWorkout:(exercise:ExerciseDefinition,workoutId?:string)=>void;onCreateWorkout:()=>void }) {
   const [workoutId,setWorkoutId]=useState(workouts[0]?.id??"");
   const selectedWorkout=workouts.find((workout)=>workout.id===workoutId);
-  return <div className="page"><ExerciseBrowser data={data} selectedWorkout={selectedWorkout} onAdd={workouts.length?((exercise)=>onAddToWorkout(exercise,workoutId)):undefined} onFavorite={onFavorite} showHeader/><div className="library-add-bar"><div><span className="eyebrow">ADICIONAR AO SEU TREINO</span><strong>{workouts.length?"Escolha uma rotina para receber o exercício.":"Você ainda não criou uma rotina."}</strong></div>{workouts.length?<><Field label="SELECIONE UM TREINO"><select value={workoutId} onChange={(event)=>setWorkoutId(event.target.value)}>{workouts.map((workout)=><option key={workout.id} value={workout.id}>{workout.title}</option>)}</select></Field><span className="library-add-hint">Toque em “Adicionar” em qualquer movimento.</span></>:<Button onClick={onCreateWorkout}><Plus size={15}/> CRIAR TREINO</Button>}</div></div>;
+  const addBar = <div className="library-add-bar library-add-bar-top"><div><span className="eyebrow">ADICIONAR AO SEU TREINO</span><strong>{workouts.length?"Escolha uma rotina para receber o exercício.":"Você ainda não criou uma rotina."}</strong></div>{workouts.length?<><Field label="SELECIONE UM TREINO"><select value={workoutId} onChange={(event)=>setWorkoutId(event.target.value)}>{workouts.map((workout)=><option key={workout.id} value={workout.id}>{workout.title}</option>)}</select></Field><span className="library-add-hint">Toque em “Adicionar” em qualquer movimento.</span></>:<Button onClick={onCreateWorkout}><Plus size={15}/> CRIAR TREINO</Button>}</div>;
+  return <div className="page"><ExerciseBrowser data={data} selectedWorkout={selectedWorkout} onAdd={workouts.length?((exercise)=>onAddToWorkout(exercise,workoutId)):undefined} onFavorite={onFavorite} showHeader topContent={addBar}/></div>;
 }
