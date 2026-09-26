@@ -1,5 +1,6 @@
 import type { DayKey, ExerciseDefinition, ExerciseSet, Workout, WorkoutExercise } from "../types";
 import { EXERCISE_IMAGES } from "./exerciseImages";
+import { EXERCISE_FOCUS } from "./exerciseFocus";
 
 const rows: Array<[string, string, string, string, number, string, number, string, string]> = [
   ["hip-thrust", "Hip Thrust", "Glúteos", "Barra", 4, "12", 90, "Extensão de quadril com ênfase em glúteos.", "Apoie a parte superior das costas no banco, mantenha o queixo recolhido e suba até alinhar quadril e tronco."],
@@ -39,7 +40,7 @@ const rows: Array<[string, string, string, string, number, string, number, strin
 ];
 
 export const EXERCISE_CATALOG: ExerciseDefinition[] = rows.map(([id, name, muscle, equipment, defaultSets, defaultReps, defaultRestSeconds, description, instructions]) => ({
-  id, name, muscle, equipment, defaultSets, defaultReps, defaultRestSeconds, description, instructions, imageUrl: EXERCISE_IMAGES[id],
+  id, name, muscle, equipment, defaultSets, defaultReps, defaultRestSeconds, description, instructions, imageUrl: EXERCISE_IMAGES[id], ...EXERCISE_FOCUS[id as keyof typeof EXERCISE_FOCUS],
 }));
 
 export const DAYS: Array<{ key: DayKey; label: string; short: string }> = [

@@ -17,7 +17,7 @@ import ProfilePage from "./pages/ProfilePage";
 import SettingsPage from "./pages/SettingsPage";
 import { useBellaFit } from "./hooks/useBellaFit";
 import { createInitialData, validateBackup } from "./lib/storageService";
-import { assignScheduledWorkout, duplicateWorkout as createWorkoutCopy, updateWorkoutSchedule } from "./lib/programService";
+import { appendExerciseToWorkout, assignScheduledWorkout, duplicateWorkout as createWorkoutCopy, updateWorkoutSchedule } from "./lib/programService";
 import { getDailyWorkoutReminder, reminderStorageKey } from "./lib/notificationService";
 import { appAssetUrl } from "./lib/assetPaths";
 import { EXERCISE_CATALOG, makeId, WORKOUT_COLORS } from "./lib/catalog";
@@ -92,7 +92,7 @@ export default function App() {
   const searchResults = useMemo(() => {
     if (!data || !searchValue.trim()) return [];
     const term = searchValue.trim().toLocaleLowerCase("pt-BR");
-    return [...EXERCISE_CATALOG, ...data.customExercises].filter((exercise) => `${exercise.name} ${exercise.muscle} ${exercise.equipment}`.toLocaleLowerCase("pt-BR").includes(term)).slice(0, 6);
+    return [...EXERCISE_CATALOG, ...data.customExercises].filter((exercise) => `${exercise.name} ${exercise.muscle} ${exercise.equipment} ${exercise.purpose ?? ""} ${exercise.description} ${(exercise.primaryMuscles ?? []).join(" ")} ${(exercise.secondaryMuscles ?? []).join(" ")}`.toLocaleLowerCase("pt-BR").includes(term)).slice(0, 6);
   }, [data, searchValue]);
 
   function createWorkout() {
@@ -143,7 +143,7 @@ export default function App() {
   }
   function addExerciseToWorkout(exercise: ExerciseDefinition, workoutId?: string) {
     if (!workoutId) return;
-    updateData((current) => ({ ...current, workouts: current.workouts.map((workout) => workout.id === workoutId && !workout.exercises.some((item) => item.name === exercise.name) ? { ...workout, exercises: [...workout.exercises, { ...exercise, sets: Array.from({ length: exercise.defaultSets }, () => ({ id: makeId("set"), reps: exercise.defaultReps, weight: "", method: "Repetições" as const, seconds: 45 })), restSeconds: exercise.defaultRestSeconds, note: "" }], updatedAt: new Date().toISOString() } : workout) }));
+    updateData((current) => ({ ...current, workouts: current.workouts.map((workout) => workout.id === workoutId ? appendExerciseToWorkout(workout, exercise) : workout) }));
   }
   function importData(next: BellaData) {
     if (!account || !validateBackup({ format: "bella-fit-backup", version: 1, exportedAt: "", user: { name: "", email: "" }, data: next })) { toast.error("Este arquivo de backup não pôde ser validado."); return; }

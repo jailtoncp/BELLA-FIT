@@ -19,6 +19,9 @@ export interface ExerciseDefinition {
   defaultSets: number;
   defaultReps: string;
   defaultRestSeconds: number;
+  purpose?: string;
+  primaryMuscles?: string[];
+  secondaryMuscles?: string[];
   imageUrl?: string;
   custom?: boolean;
 }

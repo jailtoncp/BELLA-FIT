@@ -1,7 +1,16 @@
 import type { BellaData, DayKey, Workout } from "../types";
-import { makeId } from "./catalog";
+import { makeId, makeWorkoutExercise } from "./catalog";
 
 const DAY_KEYS: DayKey[] = ["seg", "ter", "qua", "qui", "sex", "sab", "dom"];
+
+export function appendExerciseToWorkout(workout: Workout, definition: Parameters<typeof makeWorkoutExercise>[0]): Workout {
+  if (workout.exercises.some((exercise) => exercise.name === definition.name)) return workout;
+  return {
+    ...workout,
+    exercises: [...workout.exercises, makeWorkoutExercise(definition)],
+    updatedAt: new Date().toISOString(),
+  };
+}
 
 export function updateWorkoutSchedule(data: BellaData, next: Workout): BellaData {
   const daysTaken = new Set(next.days);

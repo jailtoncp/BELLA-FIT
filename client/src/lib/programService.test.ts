@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { createInitialData } from "./storageService";
-import { assignScheduledWorkout, duplicateWorkout, updateWorkoutSchedule } from "./programService";
+import { appendExerciseToWorkout, assignScheduledWorkout, duplicateWorkout, updateWorkoutSchedule } from "./programService";
 
 describe("Bella Fit schedule and workout helpers", () => {
   it("keeps workout weekday labels synchronized when changing days in the editor", () => {
@@ -38,5 +38,31 @@ describe("Bella Fit schedule and workout helpers", () => {
     expect(copy.exercises[0].sets[0].id).not.toBe(original.exercises[0].sets[0].id);
     copy.exercises[0].sets[0].weight = "99";
     expect(original.exercises[0].sets[0].weight).not.toBe("99");
+  });
+});
+
+
+describe("unlimited workout exercises", () => {
+  it("adds more than seven distinct exercises and keeps duplicate names from being added twice", () => {
+    const data = createInitialData("QA", "qa@example.com");
+    const original = data.workouts[0];
+    const definitions = Array.from({ length: 12 }, (_, index) => ({
+      id: `qa-exercise-${index + 1}`,
+      name: `Movimento QA ${index + 1}`,
+      muscle: "Pernas",
+      equipment: "Halter",
+      description: "Movimento de teste.",
+      instructions: "Execute com controle.",
+      defaultSets: 3,
+      defaultReps: "12",
+      defaultRestSeconds: 60,
+    }));
+    const expanded = definitions.reduce((workout, definition) => appendExerciseToWorkout(workout, definition), original);
+
+    expect(expanded.exercises).toHaveLength(original.exercises.length + 12);
+    expect(expanded.exercises.length).toBeGreaterThan(7);
+    expect(appendExerciseToWorkout(expanded, definitions[0])).toBe(expanded);
+    expect(original.exercises).toHaveLength(4);
+    expect(expanded.exercises.at(-1)?.sets).toHaveLength(3);
   });
 });

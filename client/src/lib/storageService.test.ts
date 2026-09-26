@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { deleteAccount, getCurrentAccount, loadData, loginAccount, makeBackup, registerAccount, resetLocalPassword, saveData, signOut, validateBackup } from "./storageService";
+import type { ExerciseDefinition } from "../types";
 
 class MemoryStorage implements Storage {
   private items = new Map<string, string>();
@@ -61,5 +62,39 @@ describe("Bella Fit local account storage", () => {
     signOut();
     await expect(loginAccount(account.email, "strong-pass-5")).rejects.toThrow("incorretos");
     expect((await loginAccount(account.email, "updated-pass-6")).id).toBe(account.id);
+  });
+
+  it("preserves the technical purpose and primary/secondary muscles of personal exercises", async () => {
+    const account = await registerAccount("Fabi", "fabi@example.com", "strong-pass-7");
+    const data = loadData(account);
+    const customExercise: ExerciseDefinition = {
+      id: "custom-extension",
+      name: "Extensão personalizada",
+      muscle: "Pernas",
+      equipment: "Máquina",
+      description: "Observação de execução.",
+      instructions: "Executar conforme orientação profissional.",
+      defaultSets: 3,
+      defaultReps: "12",
+      defaultRestSeconds: 60,
+      purpose: "Estender o joelho contra resistência.",
+      primaryMuscles: ["Quadríceps"],
+      secondaryMuscles: ["Reto femoral", "Vasto medial"],
+      custom: true,
+    };
+    data.customExercises.push(customExercise);
+    saveData(account, data);
+
+    const restored = loadData(account).customExercises.find((exercise) => exercise.id === customExercise.id);
+    expect(restored?.purpose).toBe(customExercise.purpose);
+    expect(restored?.primaryMuscles).toEqual(["Quadríceps"]);
+    expect(restored?.secondaryMuscles).toEqual(["Reto femoral", "Vasto medial"]);
+
+    const backup = makeBackup(account, loadData(account));
+    expect(validateBackup(backup)).toBe(true);
+    const imported = JSON.parse(JSON.stringify(backup));
+    expect(validateBackup(imported)).toBe(true);
+    expect(imported.data.customExercises[0].primaryMuscles).toEqual(["Quadríceps"]);
+    expect(imported.data.customExercises[0].secondaryMuscles).toEqual(["Reto femoral", "Vasto medial"]);
   });
 });

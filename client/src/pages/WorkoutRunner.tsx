@@ -153,6 +153,11 @@ export default function WorkoutRunner({ workout, data, onUpdate, onFinish, onExi
         <div className="runner-exercise-head"><span className="eyebrow">EXERCÍCIO {String(active.exerciseIndex + 1).padStart(2, "0")} DE {String(workout.exercises.length).padStart(2, "0")}</span><span className="runner-muscle-tag">{exercise.muscle}</span></div>
         <h1>{exercise.name}</h1>
         <p className="runner-equipment">{exercise.equipment} · {exercise.sets.length} séries planejadas</p>
+        <section className="runner-tech-focus" aria-label="Finalidade e ação muscular do exercício">
+          <p>{exercise.purpose || exercise.description}</p>
+          {exercise.primaryMuscles?.length ? <div><strong>Principal:</strong><span>{exercise.primaryMuscles.join(" · ")}</span></div> : null}
+          {exercise.secondaryMuscles?.length ? <div><strong>Auxiliares / estabilizadores:</strong><span>{exercise.secondaryMuscles.join(" · ")}</span></div> : null}
+        </section>
         <div className="runner-demo"><div className="exercise-art-ring large" /><Dumbbell size={65} /><span>EXECUTE COM CONTROLE</span>{exercise.imageUrl && <img src={exercise.imageUrl} alt={`Demonstração de ${exercise.name}`} onError={(event) => { event.currentTarget.style.display = "none"; }} />}<Pill tone="neutral"><Clock3 size={12} />{exercise.restSeconds}s descanso</Pill></div>
         {exercise.note && <div className="runner-note"><span>LEMBRETE</span><p>{exercise.note}</p></div>}
         {(completion || currentSetDone) && <div className="set-completed-banner" role="status"><CheckCircle2 size={16} /><span>SÉRIE CONCLUÍDA</span><small>{allSetsDone ? "Rotina completa — parabéns pela constância." : "Você está construindo sua força, série por série."}</small></div>}
