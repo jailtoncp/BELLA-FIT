@@ -574,7 +574,7 @@ kbd { padding: 2px 5px; border: 1px solid var(--line); border-radius: 5px; color
 .exercise-tile { overflow: hidden; animation: page-in 220ms var(--ease-out) both; }
 .exercise-favorite { position: absolute; z-index: 2; top: 10px; right: 10px; width: 31px; height: 31px; display: grid; place-items: center; border: 1px solid rgba(255,255,255,.6); border-radius: 50%; color: var(--rose); background: rgba(255,255,255,.85); backdrop-filter: blur(8px); cursor: pointer; }
 .exercise-gif-input { display: none; }
-.exercise-gif-picker { position: absolute; z-index: 3; top: 9px; left: 9px; min-height: 34px; display: inline-flex; align-items: center; justify-content: center; gap: 5px; padding: 0 9px; border: 1px solid rgba(255,255,255,.72); border-radius: 999px; color: #8c365b; background: rgba(255,253,252,.92); box-shadow: 0 2px 8px rgba(47,20,33,.12); backdrop-filter: blur(8px); font-size: 8px; font-weight: 800; letter-spacing: .025em; cursor: pointer; transition: transform .16s var(--ease-out), background .16s var(--ease-out); }
+ .exercise-gif-picker { position: absolute; z-index: 3; top: 83px; right: 8px; width: 29px; height: 29px; display: inline-grid; place-items: center; padding: 0; border: 1px solid rgba(255,255,255,.78); border-radius: 50%; color: #8c365b; background: rgba(255,253,252,.92); box-shadow: 0 2px 8px rgba(47,20,33,.16); backdrop-filter: blur(8px); cursor: pointer; transition: transform .16s var(--ease-out), background .16s var(--ease-out); }
 .exercise-gif-picker:hover { background: #fff; }
 .exercise-gif-picker:active { transform: scale(.97); }
 .exercise-gif-picker:disabled { opacity: .72; cursor: wait; }
@@ -1188,7 +1188,7 @@ kbd { padding: 2px 5px; border: 1px solid var(--line); border-radius: 5px; color
   .exercise-library-grid { gap: 10px; }
   .exercise-art { height: clamp(100px, 30vw, 145px); }
   .exercise-favorite { top: 7px; right: 7px; width: 44px; height: 44px; }
-  .exercise-gif-picker { top: 6px; left: 6px; min-height: 44px; gap: 5px; padding: 0 8px; font-size: 9px; }
+  .exercise-gif-picker { top: calc(clamp(100px, 30vw, 145px) - 34px); right: 6px; width: 28px; height: 28px; }
   .exercise-tile-copy { padding: 10px; }
   .exercise-tile-copy .eyebrow { font-size: 9px; }
   .exercise-tile-copy h3 { font-size: 15px; line-height: 1.25; }
