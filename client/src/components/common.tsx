@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { X } from "lucide-react";
+import { createPortal } from "react-dom";
 
 export function Button({ children, variant = "primary", size = "md", className = "", ...props }: React.ButtonHTMLAttributes<HTMLButtonElement> & { variant?: "primary" | "secondary" | "ghost" | "danger" | "outline"; size?: "sm" | "md" | "lg" }) {
   return <button className={`btn btn-${variant} btn-${size} ${className}`} {...props}>{children}</button>;
@@ -11,14 +12,14 @@ export function Card({ children, className = "", ...props }: React.HTMLAttribute
 
 export function Modal({ open, title, eyebrow, onClose, children, wide = false }: { open: boolean; title: string; eyebrow?: string; onClose: () => void; children: ReactNode; wide?: boolean }) {
   if (!open) return null;
-  return <div className="modal-backdrop" onMouseDown={(event) => { if (event.target === event.currentTarget) onClose(); }}>
+  return createPortal(<div className="modal-backdrop" onMouseDown={(event) => { if (event.target === event.currentTarget) onClose(); }}>
     <section className={`modal ${wide ? "modal-wide" : ""}`} role="dialog" aria-modal="true" aria-labelledby="modal-title">
       <button className="icon-button modal-close" type="button" onClick={onClose} aria-label="Fechar"><X size={18} /></button>
       {eyebrow && <span className="eyebrow">{eyebrow}</span>}
       <h2 id="modal-title">{title}</h2>
       {children}
     </section>
-  </div>;
+  </div>, document.body);
 }
 
 export function PageHeading({ eyebrow, title, description, actions }: { eyebrow?: string; title: ReactNode; description?: string; actions?: ReactNode }) {
