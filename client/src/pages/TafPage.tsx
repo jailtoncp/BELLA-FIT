@@ -6,7 +6,7 @@ import { formatTafValue, getTafBest, TAF_EXERCISES, type TafDemoKind, type TafEx
 import { TAF_SOURCES } from "../lib/tafSources";
 
 const MEDIA = {
-  "distance-run": { file: "running.gif", storageFile: "running_5b71ac30.gif", source: "https://commons.wikimedia.org/wiki/File:Running.gif", credit: "Fengalon · domínio público" },
+  "distance-run": { file: "running.gif", storageFile: "running-optimized_f290e3b5.gif", source: "https://commons.wikimedia.org/wiki/File:Running.gif", credit: "Fengalon · domínio público" },
   "pull-up": { file: "pull-up.gif", storageFile: "pull-up_d3c4a899.gif", source: "https://commons.wikimedia.org/wiki/File:Pullup.gif", credit: "Extremistpullup · CC BY-SA 3.0" },
 } as const;
 
