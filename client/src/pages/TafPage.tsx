@@ -1,8 +1,9 @@
 import { useMemo, useState } from "react";
-import { Activity, CalendarDays, ClipboardCheck, Dumbbell, Footprints, Info, MapPin, Plus, Ruler, Timer, Trophy, X } from "lucide-react";
+import { Activity, CalendarDays, ClipboardCheck, Dumbbell, Footprints, Info, MapPin, Plus, Ruler, Timer, TrendingUp, Trophy, X } from "lucide-react";
+import { CartesianGrid, Line, LineChart, ReferenceDot, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import type { BellaData, TafAttempt } from "../types";
 import { Button, Card, Field, Modal, PageHeading, Pill } from "../components/common";
-import { formatTafValue, getTafBest, TAF_EXERCISES, type TafDemoKind, type TafExercise } from "../lib/tafService";
+import { formatTafValue, getTafBest, getTafProgressPoints, TAF_EXERCISES, type TafDemoKind, type TafExercise } from "../lib/tafService";
 import { TAF_SOURCES } from "../lib/tafSources";
 import { TAF_MEDIA } from "../lib/tafMedia";
 
@@ -78,6 +79,7 @@ function DemoArt({ exercise }: { exercise: TafExercise }) {
 
 export default function TafPage({ data, onSave }: { data: BellaData; onSave: (attempt: TafAttempt) => void }) {
   const [category, setCategory] = useState("Todas");
+  const [chartExerciseId, setChartExerciseId] = useState(TAF_EXERCISES[0].id);
   const [activeExercise, setActiveExercise] = useState<TafExercise | null>(null);
   const [recording, setRecording] = useState(false);
   const [value, setValue] = useState("");
@@ -86,6 +88,17 @@ export default function TafPage({ data, onSave }: { data: BellaData; onSave: (at
   const [notes, setNotes] = useState("");
   const [formError, setFormError] = useState("");
   const attempts = data.tafAttempts ?? [];
+  const chartExercise = TAF_EXERCISES.find((exercise) => exercise.id === chartExerciseId) ?? TAF_EXERCISES[0];
+  const chartPoints = useMemo(() => getTafProgressPoints(attempts, chartExercise), [attempts, chartExercise]);
+  const chartBest = getTafBest(attempts, chartExercise);
+  const firstChartPoint = chartPoints[0];
+  const lastChartPoint = chartPoints[chartPoints.length - 1];
+  const changeFromFirst = firstChartPoint && lastChartPoint ? lastChartPoint.value - firstChartPoint.value : 0;
+  const improvement = chartExercise.higherIsBetter ? changeFromFirst : -changeFromFirst;
+  const chartMin = chartPoints.length ? Math.min(...chartPoints.map((point) => point.value)) : 0;
+  const chartMax = chartPoints.length ? Math.max(...chartPoints.map((point) => point.value)) : 0;
+  const chartPadding = chartPoints.length ? Math.max((chartMax - chartMin) * 0.16, Math.abs(chartMax || chartMin) * 0.06, chartExercise.defaultUnit === "reps" ? 1 : 0.1) : 1;
+  const chartDomain: [number, number] = [Math.max(0, chartMin - chartPadding), chartMax + chartPadding];
   const categories = useMemo(() => ["Todas", ...Array.from(new Set(TAF_EXERCISES.map((exercise) => exercise.category)))], []);
   const visibleExercises = category === "Todas" ? TAF_EXERCISES : TAF_EXERCISES.filter((exercise) => exercise.category === category);
   const recordedExercises = new Set(attempts.map((attempt) => attempt.exerciseId));
@@ -112,6 +125,30 @@ export default function TafPage({ data, onSave }: { data: BellaData; onSave: (at
     <PageHeading eyebrow="TREINO DE APTIDÃO FÍSICA" title={<>Preparação para o <em>TAF</em></>} description="Acompanhe suas marcas nas provas físicas presentes em concursos policiais. Cada edital define o próprio protocolo." actions={<Pill tone="rose"><ClipboardCheck size={13}/> ÁREA EXCLUSIVA TAF</Pill>}/>
     <div className="taf-notice" role="note"><Info size={18}/><p><strong>Sem índices universais.</strong> As modalidades, a execução e os critérios mudam entre concursos. Use a área para registrar seus próprios resultados e confirme cada regra no edital vigente.</p></div>
     <div className="taf-stats" aria-label="Resumo do acompanhamento TAF"><Card className="taf-stat"><span className="taf-stat-icon"><ClipboardCheck size={18}/></span><span className="eyebrow">TENTATIVAS REGISTRADAS</span><strong>{attempts.length}</strong><small>no seu perfil local</small></Card><Card className="taf-stat"><span className="taf-stat-icon"><Activity size={18}/></span><span className="eyebrow">MODALIDADES ACOMPANHADAS</span><strong>{recordedExercises.size}<small>/{TAF_EXERCISES.length}</small></strong><small>com ao menos uma marca</small></Card><Card className="taf-stat taf-stat-last"><span className="taf-stat-icon"><CalendarDays size={18}/></span><span className="eyebrow">ÚLTIMA TENTATIVA</span><strong className="taf-stat-date">{latest ? dateLabel(latest.measuredAt) : "—"}</strong><small>{attemptExercise?.name ?? "Registre sua primeira marca"}</small></Card></div>
+    <section className="taf-progress" aria-labelledby="taf-progress-title">
+      <div className="taf-progress-heading">
+        <div><span className="eyebrow">SEU HISTÓRICO EM FOCO</span><h2 id="taf-progress-title"><TrendingUp size={22}/> Evolução das marcas</h2><p>Acompanhe cada resultado registrado, modalidade por modalidade.</p></div>
+        <Field label="ESCOLHA A MODALIDADE"><select value={chartExerciseId} onChange={(event) => setChartExerciseId(event.target.value)}>{TAF_EXERCISES.map((exercise) => <option key={exercise.id} value={exercise.id}>{exercise.name}</option>)}</select></Field>
+      </div>
+      <div className="taf-progress-summary" aria-live="polite">
+        <Card className="taf-progress-stat"><span className="eyebrow">MARCAS NO GRÁFICO</span><strong>{chartPoints.length}</strong><small>tentativas válidas</small></Card>
+        <Card className="taf-progress-stat"><span className="eyebrow">MELHOR MARCA</span><strong>{chartBest === null ? "—" : formatTafValue(chartBest, chartExercise.defaultUnit)}</strong><small>{chartExercise.higherIsBetter ? "maior resultado" : "menor tempo"}</small></Card>
+        <Card className="taf-progress-stat"><span className="eyebrow">DESDE A PRIMEIRA</span><strong className={chartPoints.length > 1 ? (improvement > 0 ? "is-improved" : improvement < 0 ? "is-lower" : "") : ""}>{chartPoints.length > 1 ? improvement !== 0 ? `${changeFromFirst > 0 ? "+" : "−"}${formatTafValue(Math.abs(changeFromFirst), chartExercise.defaultUnit)}` : "Sem variação" : "—"}</strong><small>{chartPoints.length > 1 ? improvement > 0 ? "melhor que a primeira" : improvement < 0 ? "resultado menos favorável" : "mesmo valor da primeira" : "registre mais uma marca"}</small></Card>
+      </div>
+      {chartPoints.length ? <div className="taf-progress-chart" role="img" aria-label={`Gráfico da evolução de ${chartExercise.name} com ${chartPoints.length} marcas registradas`}>
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart data={chartPoints} margin={{ top: 14, right: 16, bottom: 5, left: 2 }}>
+            <CartesianGrid stroke="var(--line)" strokeDasharray="3 5" vertical={false}/>
+            <XAxis dataKey="dateLabel" tick={{ fill: "var(--muted)", fontSize: 10 }} tickLine={false} axisLine={{ stroke: "var(--line)" }} minTickGap={18} interval="preserveStartEnd"/>
+            <YAxis domain={chartDomain} width={48} tick={{ fill: "var(--muted)", fontSize: 10 }} tickLine={false} axisLine={false} tickFormatter={(value: number) => chartExercise.defaultUnit === "s" ? Number(value).toLocaleString("pt-BR", { maximumFractionDigits: 2 }) : Number(value).toLocaleString("pt-BR", { maximumFractionDigits: chartExercise.defaultUnit === "reps" ? 0 : 1 })}/>
+            <Tooltip cursor={{ stroke: "var(--rose)", strokeDasharray: "3 4", strokeOpacity: 0.35 }} content={({ active, payload }) => active && payload?.length ? <div className="taf-chart-tooltip"><strong>{payload[0].payload.fullDateLabel}</strong>{payload[0].payload.exam && <span>{payload[0].payload.exam}</span>}<b>{formatTafValue(Number(payload[0].value), chartExercise.defaultUnit)}</b></div> : null}/>
+            <Line type="monotone" dataKey="value" name="Marca" stroke="var(--rose)" strokeWidth={3} dot={{ r: 4, fill: "var(--rose)", stroke: "var(--card)", strokeWidth: 2 }} activeDot={{ r: 6, stroke: "var(--card)", strokeWidth: 2 }} isAnimationActive={false}/>
+            {chartBest !== null && chartPoints.filter((point) => point.value === chartBest).slice(-1).map((point) => <ReferenceDot key={point.id} x={point.dateLabel} y={point.value} r={7} fill="var(--rose-deep)" stroke="var(--card)" strokeWidth={3} isFront/>) }
+          </LineChart>
+        </ResponsiveContainer>
+      </div> : <div className="taf-progress-empty"><span><TrendingUp size={21}/></span><div><strong>Seu gráfico começa com a primeira marca.</strong><p>Registre um resultado na modalidade selecionada para visualizar sua evolução ao longo do tempo.</p></div></div>}
+      {chartPoints.length > 0 && <p className="taf-progress-note"><Info size={13}/>{chartExercise.higherIsBetter ? "Valores maiores indicam marcas mais altas nesta modalidade." : "Nesta prova de tempo, a linha descendo representa uma marca melhor."}{chartPoints.length === 1 && " Registre outra tentativa para comparar seu progresso."}</p>}
+    </section>
     <section className="taf-library" aria-labelledby="taf-library-title"><div className="taf-section-heading"><div><span className="eyebrow">PROVAS E EXERCÍCIOS</span><h2 id="taf-library-title">Biblioteca TAF</h2></div><Field label="FILTRAR MODALIDADE"><select value={category} onChange={(event) => setCategory(event.target.value)}>{categories.map((item) => <option key={item}>{item}</option>)}</select></Field></div>
       <div className="taf-exercise-grid">{visibleExercises.map((exercise) => {
         const personalBest = getTafBest(attempts, exercise);

@@ -1360,6 +1360,30 @@ kbd { padding: 2px 5px; border: 1px solid var(--line); border-radius: 5px; color
 .taf-history-empty p { margin: 4px 0 0; color: var(--muted); font-size: 9px; line-height: 1.5; }
 .taf-disclaimer { display: flex; align-items: flex-start; gap: 7px; margin: 18px 0 0; color: var(--muted); font-size: 9px; line-height: 1.5; }
 .taf-disclaimer svg { flex: 0 0 auto; margin-top: 1px; }
+.taf-progress { margin: 28px 0 34px; }
+.taf-progress-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; margin-bottom: 14px; }
+.taf-progress-heading h2 { display: flex; align-items: center; gap: 8px; margin: 5px 0 4px; font-family: "Playfair Display",Georgia,serif; font-size: 25px; font-weight: 500; }
+.taf-progress-heading h2 svg { color: var(--rose); }
+.taf-progress-heading p { margin: 0; color: var(--muted); font-size: 10px; line-height: 1.45; }
+.taf-progress-heading > .field { width: min(100%,250px); }
+.taf-progress-heading > .field select { min-height: 42px; }
+.taf-progress-summary { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 10px; }
+.taf-progress-stat { min-width: 0; min-height: 88px; display: flex; flex-direction: column; justify-content: center; padding: 13px 15px; }
+.taf-progress-stat .eyebrow { color: var(--muted); font-size: 8px; letter-spacing: .08em; }
+.taf-progress-stat > strong { overflow: hidden; margin-top: 5px; color: var(--ink); font-size: 19px; text-overflow: ellipsis; white-space: nowrap; }
+.taf-progress-stat > strong.is-improved { color: #438773; }
+.taf-progress-stat > strong.is-lower { color: #bd6c6e; }
+.taf-progress-stat > small { margin-top: 3px; color: var(--muted); font-size: 9px; }
+.taf-progress-chart { width: 100%; height: 270px; margin-top: 12px; padding: 15px 12px 8px; overflow: hidden; border: 1px solid var(--line); border-radius: 14px; background: var(--card); }
+.taf-chart-tooltip { min-width: 138px; display: flex; flex-direction: column; gap: 5px; padding: 9px 11px; border: 1px solid var(--line); border-radius: 9px; color: var(--ink); background: var(--card); box-shadow: 0 8px 25px rgba(41,26,35,.12); font-size: 10px; }
+.taf-chart-tooltip > span { color: var(--muted); }
+.taf-chart-tooltip > b { color: var(--rose-deep); font-size: 12px; }
+.taf-progress-empty { min-height: 185px; display: flex; align-items: center; gap: 13px; margin-top: 12px; padding: 18px; border: 1px dashed var(--line-strong); border-radius: 14px; background: var(--card); }
+.taf-progress-empty > span { width: 42px; height: 42px; flex: 0 0 auto; display: grid; place-items: center; border-radius: 13px; color: var(--rose); background: var(--rose-soft); }
+.taf-progress-empty strong { color: var(--ink); font-size: 11px; }
+.taf-progress-empty p { margin: 5px 0 0; color: var(--muted); font-size: 10px; line-height: 1.55; }
+.taf-progress-note { display: flex; align-items: flex-start; gap: 6px; margin: 9px 1px 0; color: var(--muted); font-size: 9px; line-height: 1.45; }
+.taf-progress-note svg { flex: 0 0 auto; margin-top: 1px; color: var(--rose); }
 .taf-modal-content { display: flex; flex-direction: column; gap: 13px; }
 .taf-modal-content > .taf-demo { flex: 0 0 auto; height: 185px; border-radius: 12px; }
 .taf-modal-detail { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 14px; }
@@ -1393,6 +1417,17 @@ kbd { padding: 2px 5px; border: 1px solid var(--line); border-radius: 5px; color
   .taf-page { padding-bottom: 16px; }
   .taf-page .page-heading { align-items: flex-start; flex-direction: column; gap: 10px; margin-bottom: 20px; }
   .taf-page .page-heading-actions { padding-bottom: 0; }
+  .taf-progress { margin: 24px 0 28px; }
+  .taf-progress-heading { align-items: flex-start; flex-direction: column; gap: 11px; }
+  .taf-progress-heading h2 { font-size: 23px; }
+  .taf-progress-heading > .field { width: 100%; }
+  .taf-progress-summary { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 8px; }
+  .taf-progress-stat { min-height: 82px; padding: 11px; }
+  .taf-progress-stat:last-child { grid-column: 1/-1; }
+  .taf-progress-stat > strong { font-size: 17px; }
+  .taf-progress-chart { height: 235px; padding: 12px 5px 6px; }
+  .taf-progress-empty { min-height: 155px; padding: 14px; }
+  .taf-progress-note { font-size: 9px; }
   .taf-notice { margin: -3px 0 14px; padding: 12px; }
   .taf-notice p { font-size: 11px; }
   .taf-stats { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 8px; margin-bottom: 24px; }

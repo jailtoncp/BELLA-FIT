@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { appendTafAttempt, formatTafValue, getTafBest, TAF_EXERCISES } from "./tafService";
+import { appendTafAttempt, formatTafValue, getTafBest, getTafProgressPoints, TAF_EXERCISES } from "./tafService";
 import type { TafAttempt } from "../types";
 
 const makeAttempt = (id: string, exerciseId: string, value: number, measuredAt: string, unit: TafAttempt["unit"] = "s"): TafAttempt => ({ id, exerciseId, value, measuredAt, unit });
@@ -40,6 +40,28 @@ describe("TAF performance tracking", () => {
   it("does not mix results with a unit that differs from the exercise metric", () => {
     const sprint = TAF_EXERCISES.find((exercise) => exercise.id === "tiro-50-m")!;
     expect(getTafBest([makeAttempt("wrong-unit", sprint.id, 900, "2026-09-15", "m")], sprint)).toBeNull();
+  });
+
+  it("prepares chronological chart points for one exercise and matching metric only", () => {
+    const run = TAF_EXERCISES.find((exercise) => exercise.id === "corrida-12-min")!;
+    const attempts = [
+      makeAttempt("newer", run.id, 2100, "2026-09-20T12:00:00.000Z", "m"),
+      makeAttempt("other-exercise", "tiro-50-m", 9.7, "2026-09-01", "s"),
+      makeAttempt("older", run.id, 1800, "2026-09-01", "m"),
+      makeAttempt("wrong-unit", run.id, 30, "2026-09-10", "s"),
+      makeAttempt("invalid-date", run.id, 2000, "not-a-date", "m"),
+      makeAttempt("invalid-value", run.id, Number.NaN, "2026-09-12", "m"),
+    ];
+    const points = getTafProgressPoints(attempts, run);
+    expect(points.map((point) => point.id)).toEqual(["older", "newer"]);
+    expect(points.map((point) => point.value)).toEqual([1800, 2100]);
+    expect(points[0].fullDateLabel).toContain("2026");
+  });
+
+  it("returns an empty chart series when no valid matching marks exist", () => {
+    const sprint = TAF_EXERCISES.find((exercise) => exercise.id === "tiro-50-m")!;
+    expect(getTafProgressPoints([], sprint)).toEqual([]);
+    expect(getTafProgressPoints([makeAttempt("wrong-unit", sprint.id, 100, "2026-09-01", "m")], sprint)).toEqual([]);
   });
 
   it("formats units in Portuguese and returns null when there is no mark", () => {

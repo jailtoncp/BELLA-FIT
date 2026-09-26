@@ -45,3 +45,37 @@ export function getTafBest(attempts: TafAttempt[], exercise: TafExercise): numbe
   if (!values.length) return null;
   return exercise.higherIsBetter ? Math.max(...values) : Math.min(...values);
 }
+
+export interface TafProgressPoint {
+  id: string;
+  timestamp: number;
+  dateLabel: string;
+  fullDateLabel: string;
+  value: number;
+  exam?: string;
+}
+
+function parseMeasuredDate(value: string): Date {
+  // Imported backups may store a date without a time; place it at local noon
+  // to avoid a previous-day shift in time zones west of UTC.
+  return new Date(/^\d{4}-\d{2}-\d{2}$/.test(value) ? `${value}T12:00:00` : value);
+}
+
+/** Converts saved attempts into oldest-first chart points for one consistent metric. */
+export function getTafProgressPoints(attempts: TafAttempt[], exercise: TafExercise): TafProgressPoint[] {
+  return attempts
+    .filter((attempt) => attempt.exerciseId === exercise.id && attempt.unit === exercise.defaultUnit && Number.isFinite(attempt.value) && attempt.value > 0)
+    .map((attempt) => {
+      const date = parseMeasuredDate(attempt.measuredAt);
+      return {
+        id: attempt.id,
+        timestamp: date.getTime(),
+        dateLabel: Number.isNaN(date.getTime()) ? "—" : date.toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit", year: "2-digit" }),
+        fullDateLabel: Number.isNaN(date.getTime()) ? "Data não disponível" : date.toLocaleDateString("pt-BR", { day: "2-digit", month: "long", year: "numeric" }),
+        value: attempt.value,
+        exam: attempt.exam,
+      };
+    })
+    .filter((point) => Number.isFinite(point.timestamp))
+    .sort((a, b) => a.timestamp - b.timestamp || a.id.localeCompare(b.id));
+}
