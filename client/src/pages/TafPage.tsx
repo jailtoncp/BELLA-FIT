@@ -26,13 +26,52 @@ function dateLabel(value: string) {
   return Number.isNaN(date.getTime()) ? "Data não disponível" : date.toLocaleDateString("pt-BR", { day: "2-digit", month: "short", year: "numeric" });
 }
 
+function TafSchematic({ demo }: { demo: TafDemoKind }) {
+  const dark = "#765368";
+  const rose = "#c85f89";
+  const light = "#e6b4c8";
+  const ground = "#d3b8c5";
+  return <svg className={`taf-schematic taf-schematic-${demo}`} viewBox="0 0 320 150" aria-hidden="true" focusable="false">
+    <path d="M24 128H296" stroke={ground} strokeWidth="2" strokeLinecap="round"/>
+    {demo === "rower" && <g fill="none" strokeLinecap="round" strokeLinejoin="round">
+      <g stroke={light} strokeWidth="6" strokeDasharray="5 5" opacity=".8"><path d="M45 116h63l30-7"/><circle cx="36" cy="111" r="7" fill="#fbf2f6"/><path d="M101 115l28-5 31 5m-26-6 24 6"/></g>
+      <path d="M48 108h50l11 9" stroke={ground} strokeWidth="3"/><path d="M94 116h55" stroke={dark} strokeWidth="7"/><circle cx="154" cy="113" r="8" fill="#fff8fb" stroke={rose} strokeWidth="4"/><path d="M146 111l13-16 17-11" stroke={rose} strokeWidth="8"/><circle cx="181" cy="80" r="7" fill="#fff8fb" stroke={dark} strokeWidth="4"/><path d="M166 98l21-12 18 8m-25-23 13 11 12 8" stroke={dark} strokeWidth="6"/><path d="M177 83l27 18m-27-18 33 10" stroke={rose} strokeWidth="5"/>
+      <path d="M71 83c23-29 54-35 77-30" stroke={rose} strokeWidth="3"/><path d="m140 45 10 8-11 6" stroke={rose} strokeWidth="3"/>
+    </g>}
+    {demo === "sprint" && <g fill="none" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M50 112h220M66 121h198" stroke={ground} strokeWidth="2"/><path d="M54 103h28m-16 9h31" stroke={light} strokeWidth="5"/>
+      <circle cx="164" cy="40" r="10" fill="#fff8fb" stroke={dark} strokeWidth="4"/><path d="m157 52-17 27 26 12 14-27" fill={rose} stroke={dark} strokeWidth="5"/><path d="m151 61-25 6-19-11m26 12 22-10 19 4" stroke={dark} strokeWidth="6"/><path d="m143 79-30 12-23-5m50 4 22 18 24 4" stroke={dark} strokeWidth="7"/><path d="m84 38 36 0m-47 14h26m-40 14h30" stroke={light} strokeWidth="4"/><path d="M190 50h42m-10-9 11 9-11 9" stroke={rose} strokeWidth="3"/>
+    </g>}
+    {demo === "static-bar" && <g fill="none" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M90 35h140" stroke={dark} strokeWidth="7"/><path d="M105 35v13m110-13v13" stroke={ground} strokeWidth="5"/>
+      <circle cx="161" cy="62" r="9" fill="#fff8fb" stroke={dark} strokeWidth="4"/><path d="M161 72v34" stroke={rose} strokeWidth="10"/><path d="M157 75 137 44l-6-5m34 36 19-31 6-5" stroke={dark} strokeWidth="6"/><path d="m157 106-15 20m23-20 15 20" stroke={dark} strokeWidth="7"/><path d="M111 83v27m-9-9 9 10 9-10" stroke={rose} strokeWidth="3"/><circle cx="161" cy="62" r="19" stroke={light} strokeWidth="2" strokeDasharray="4 5"/>
+    </g>}
+    {demo === "jump" && <g fill="none" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M38 128v-10m12 10v-16m12 16v-21m12 21v-17m12 17v-23m12 23v-15" stroke={ground} strokeWidth="2"/><path d="M229 128v-13m12 13v-20m12 20v-14m12 14v-23m12 23v-18" stroke={ground} strokeWidth="2"/>
+      <circle cx="172" cy="45" r="9" fill="#fff8fb" stroke={dark} strokeWidth="4"/><path d="m168 56-13 27 24 12 16-23" fill={rose} stroke={dark} strokeWidth="5"/><path d="m165 63-22-14-17 1m27 2 23-17 13 3" stroke={dark} strokeWidth="6"/><path d="m177 94-28 14-20-5m50 0 29 7 19-5" stroke={dark} strokeWidth="7"/>
+      <path d="M85 100c33-56 72-73 116-63" stroke={rose} strokeWidth="3" strokeDasharray="6 6"/><path d="m192 29 11 8-13 5" stroke={rose} strokeWidth="3"/><path d="M115 125h116" stroke={rose} strokeWidth="3"/><path d="m115 120 0 10m116-10v10" stroke={rose} strokeWidth="3"/>
+    </g>}
+    {demo === "rope" && <g fill="none" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M210 13v118" stroke="#ad8d70" strokeWidth="5"/><path d="M210 13v118" stroke="#e1cdb6" strokeWidth="2" strokeDasharray="3 7"/>
+      <circle cx="166" cy="42" r="9" fill="#fff8fb" stroke={dark} strokeWidth="4"/><path d="m167 53 9 32-12 22" stroke={rose} strokeWidth="9"/><path d="m170 59 23-20 17 5m-34 4 12-27 20 1" stroke={dark} strokeWidth="6"/><path d="m164 106-20 19-7-7m16-11 14 19 16-4" stroke={dark} strokeWidth="7"/><path d="M237 93c20-18 20-39 4-52" stroke={rose} strokeWidth="3"/><path d="m239 36 2 12-12-3" stroke={rose} strokeWidth="3"/>
+    </g>}
+    {demo === "shuttle" && <g fill="none" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M48 114h224M48 119h224" stroke={ground} strokeWidth="2"/><path d="M69 113 82 89l13 24zM226 113l13-24 13 24z" fill="#edd8e1" stroke={rose} strokeWidth="3"/>
+      <circle cx="178" cy="50" r="8" fill="#fff8fb" stroke={dark} strokeWidth="4"/><path d="m174 59-18 24 22 10 15-22" fill={rose} stroke={dark} strokeWidth="5"/><path d="m166 67-24-8-18 5m29 0 24-12 15 0" stroke={dark} strokeWidth="6"/><path d="m178 91-27 9-21-7m47 7 26 8 19-6" stroke={dark} strokeWidth="7"/><path d="M206 35c36 1 53 25 38 49" stroke={rose} strokeWidth="3"/><path d="m236 80 8 8 6-11" stroke={rose} strokeWidth="3"/><path d="M117 51H78" stroke={light} strokeWidth="4"/><path d="m86 44-9 7 9 7" stroke={light} strokeWidth="4"/>
+    </g>}
+    {demo === "push-up" && <g fill="none" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M59 119h202" stroke={ground} strokeWidth="2"/><circle cx="219" cy="79" r="8" fill="#fff8fb" stroke={dark} strokeWidth="4"/><path d="m211 86-35 14-57 7-38 0" stroke={rose} strokeWidth="9"/><path d="m176 100-9 23m9-23 19 23m-93-16-14 12m0-12-8 12" stroke={dark} strokeWidth="6"/><path d="M197 67v-27m-8 8 8-9 8 9" stroke={light} strokeWidth="3"/><path d="M73 92c34-19 76-21 106-9" stroke={rose} strokeWidth="3" strokeDasharray="5 6"/>
+    </g>}
+  </svg>;
+}
+
 function DemoArt({ exercise }: { exercise: TafExercise }) {
   const media = MEDIA[exercise.demo as keyof typeof MEDIA];
   const src = demoImageUrl(exercise.demo);
   if (media && src) return <div className="taf-demo"><img src={src} alt={`Ilustração em movimento de ${exercise.name}`} loading="lazy"/><span className="taf-demo-tag"><Activity size={12}/> DEMONSTRAÇÃO</span><a className="taf-demo-credit" href={media.source} target="_blank" rel="noreferrer">{media.credit}</a></div>;
   return <div className={`taf-demo taf-demo-vector taf-demo-${exercise.demo}`} role="img" aria-label={`Ilustração esquemática de ${exercise.name}`}>
     <span className="taf-demo-tag"><Activity size={12}/> ILUSTRAÇÃO ESQUEMÁTICA</span>
-    <div className="taf-vector-stage" aria-hidden="true"><span className="taf-vector-ground"/><span className="taf-vector-person"><i/><b/><em/></span>{exercise.demo === "rope" && <span className="taf-vector-rope"/>}{exercise.demo === "jump" && <span className="taf-vector-distance"/>}{exercise.demo === "rower" && <span className="taf-vector-seat"/>}</div>
+    <TafSchematic demo={exercise.demo}/>
     <span className="taf-demo-caption">Movimento representativo · consulte o protocolo do edital</span>
   </div>;
 }

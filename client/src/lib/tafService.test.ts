@@ -12,6 +12,13 @@ describe("TAF performance tracking", () => {
     expect(TAF_EXERCISES.every((exercise) => exercise.purpose && exercise.muscles && exercise.cue)).toBe(true);
   });
 
+  it("assigns a distinct schematic or attributed demonstration to every modality", () => {
+    expect(TAF_EXERCISES.map((exercise) => exercise.demo)).toEqual([
+      "rower", "distance-run", "sprint", "static-bar", "pull-up", "jump", "rope", "shuttle", "push-up",
+    ]);
+    expect(new Set(TAF_EXERCISES.map((exercise) => exercise.demo)).size).toBe(TAF_EXERCISES.length);
+  });
+
   it("stores attempts newest-first without changing the original array", () => {
     const original = [makeAttempt("old", "tiro-50-m", 9.8, "2026-09-01")];
     const result = appendTafAttempt(original, makeAttempt("new", "tiro-50-m", 9.4, "2026-09-20"));

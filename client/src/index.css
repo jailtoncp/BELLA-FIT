@@ -1316,24 +1316,9 @@ kbd { padding: 2px 5px; border: 1px solid var(--line); border-radius: 5px; color
 .dark .taf-demo-caption { color: #c6acb8; }
 .taf-demo-vector { background: radial-gradient(ellipse at 55% 34%,#fff 0%,#fbf0f4 56%,#f2e7ec 100%); }
 .dark .taf-demo-vector { background: radial-gradient(ellipse at 55% 34%,#373039 0%,#30252d 56%,#281f26 100%); }
-.taf-vector-stage { position: relative; width: min(76%,220px); height: 112px; display: flex; align-items: flex-end; justify-content: center; }
-.taf-vector-ground { position: absolute; right: 0; bottom: 17px; left: 0; height: 2px; border-radius: 2px; background: #d4b4c2; }
-.taf-vector-person { position: absolute; z-index: 1; bottom: 19px; left: 48%; width: 14px; height: 52px; border-radius: 10px; background: #cc6d91; transform: rotate(-17deg); box-shadow: 0 0 0 7px rgba(217,74,130,.08); }
-.taf-vector-person::before { content: ""; position: absolute; top: -12px; left: 1px; width: 12px; height: 12px; border: 2px solid #b6557b; border-radius: 50%; background: #fff8fa; }
-.taf-vector-person i,.taf-vector-person b,.taf-vector-person em { position: absolute; display: block; height: 4px; border-radius: 5px; background: #96617a; }
-.taf-vector-person i { top: 7px; left: -15px; width: 22px; transform: rotate(-25deg); }
-.taf-vector-person b { right: -13px; bottom: 3px; width: 24px; transform: rotate(37deg); }
-.taf-vector-person em { bottom: -3px; left: -6px; width: 24px; transform: rotate(-38deg); }
-.taf-demo-rope .taf-vector-rope { position: absolute; z-index: 0; top: 3px; left: 56%; width: 3px; height: 90px; border-radius: 3px; background: repeating-linear-gradient(180deg,#ac8c6c 0 5px,#d7c4a9 5px 8px); }
-.taf-demo-rope .taf-vector-person { left: 45%; transform: rotate(9deg); }
-.taf-demo-jump .taf-vector-person { bottom: 27px; left: 47%; transform: rotate(42deg); }
-.taf-demo-jump .taf-vector-distance { position: absolute; bottom: 8px; left: 13%; width: 74%; height: 7px; border-right: 2px solid #c67998; border-left: 2px solid #c67998; border-bottom: 1px dashed #c67998; }
-.taf-demo-rower .taf-vector-person { bottom: 22px; left: 47%; width: 48px; height: 12px; transform: rotate(-12deg); }
-.taf-demo-rower .taf-vector-person::before { top: -9px; left: -8px; }
-.taf-demo-rower .taf-vector-person i { top: 3px; left: 29px; transform: rotate(35deg); }
-.taf-demo-rower .taf-vector-person b { right: -11px; bottom: 7px; transform: rotate(-48deg); }
-.taf-demo-rower .taf-vector-person em { bottom: -5px; left: 23px; transform: rotate(25deg); }
-.taf-demo-rower .taf-vector-seat { position: absolute; z-index: 0; bottom: 20px; left: 21%; width: 60%; height: 9px; border: 1px solid #c99caf; border-radius: 7px; background: #e7d4dd; }
+.taf-schematic { display: block; width: min(92%,320px); height: 100%; overflow: visible; }
+.taf-schematic > g { filter: drop-shadow(0 2px 1px rgba(119,75,96,.08)); }
+.dark .taf-schematic { filter: brightness(1.15) saturate(.9); }
 .taf-card-copy { padding: 13px 14px 8px; }
 .taf-card-copy > .pill { min-height: 21px; font-size: 7px; }
 .taf-card-copy h3 { margin: 9px 0 5px; font-family: "Playfair Display",Georgia,serif; font-size: 19px; font-weight: 500; line-height: 1.2; }
