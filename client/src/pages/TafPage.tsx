@@ -1,12 +1,13 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Activity, CalendarDays, ClipboardCheck, Dumbbell, Footprints, Info, LoaderCircle, MapPin, Pencil, Plus, Ruler, Timer, TrendingUp, Trophy, X } from "lucide-react";
 import { CartesianGrid, Line, LineChart, ReferenceDot, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-import type { BellaData, TafAttempt } from "../types";
+import type { BellaData, TafAttempt, TafExerciseOverride } from "../types";
 import { Button, Card, Field, Modal, PageHeading, Pill } from "../components/common";
 import { formatTafValue, getTafBest, getTafProgressPoints, TAF_EXERCISES, type TafDemoKind, type TafExercise } from "../lib/tafService";
 import { TAF_SOURCES } from "../lib/tafSources";
 import { TAF_MEDIA } from "../lib/tafMedia";
 import { loadExerciseGifs, saveExerciseGif, validateExerciseGif } from "../lib/exerciseGifStorage";
+import ExerciseEditorModal from "../components/ExerciseEditorModal";
 
 function localDateInputValue() {
   const today = new Date();
@@ -79,10 +80,11 @@ function DemoArt({ exercise, overrideUrl, onEdit, uploading }: { exercise: TafEx
   </div>;
 }
 
-export default function TafPage({ data, accountId, onSave }: { data: BellaData; accountId: string; onSave: (attempt: TafAttempt) => void }) {
+export default function TafPage({ data, accountId, onSave, onSaveExercise, onDeleteExercise }: { data: BellaData; accountId: string; onSave: (attempt: TafAttempt) => void; onSaveExercise: (id: string, override: TafExerciseOverride) => void; onDeleteExercise: (id: string) => void }) {
   const [category, setCategory] = useState("Todas");
   const [chartExerciseId, setChartExerciseId] = useState(TAF_EXERCISES[0].id);
   const [activeExercise, setActiveExercise] = useState<TafExercise | null>(null);
+  const [editingExercise, setEditingExercise] = useState<TafExercise | null>(null);
   const [recording, setRecording] = useState(false);
   const [value, setValue] = useState("");
   const [measuredAt, setMeasuredAt] = useState(localDateInputValue);
@@ -95,7 +97,8 @@ export default function TafPage({ data, accountId, onSave }: { data: BellaData; 
   const gifInputs = useRef<Record<string, HTMLInputElement | null>>({});
   const objectUrls = useRef(new Set<string>());
   const attempts = data.tafAttempts ?? [];
-  const chartExercise = TAF_EXERCISES.find((exercise) => exercise.id === chartExerciseId) ?? TAF_EXERCISES[0];
+  const tafExercises = useMemo(() => TAF_EXERCISES.filter((exercise) => !data.hiddenExerciseIds.includes(exercise.id)).map((exercise) => ({ ...exercise, ...(data.tafExerciseOverrides[exercise.id] ?? {}) })), [data.hiddenExerciseIds, data.tafExerciseOverrides]);
+  const chartExercise = tafExercises.find((exercise) => exercise.id === chartExerciseId) ?? tafExercises[0] ?? TAF_EXERCISES[0];
   const chartPoints = useMemo(() => getTafProgressPoints(attempts, chartExercise), [attempts, chartExercise]);
   const chartBest = getTafBest(attempts, chartExercise);
   const firstChartPoint = chartPoints[0];
@@ -106,8 +109,8 @@ export default function TafPage({ data, accountId, onSave }: { data: BellaData; 
   const chartMax = chartPoints.length ? Math.max(...chartPoints.map((point) => point.value)) : 0;
   const chartPadding = chartPoints.length ? Math.max((chartMax - chartMin) * 0.16, Math.abs(chartMax || chartMin) * 0.06, chartExercise.defaultUnit === "reps" ? 1 : 0.1) : 1;
   const chartDomain: [number, number] = [Math.max(0, chartMin - chartPadding), chartMax + chartPadding];
-  const categories = useMemo(() => ["Todas", ...Array.from(new Set(TAF_EXERCISES.map((exercise) => exercise.category)))], []);
-  const visibleExercises = category === "Todas" ? TAF_EXERCISES : TAF_EXERCISES.filter((exercise) => exercise.category === category);
+  const categories = useMemo(() => ["Todas", ...Array.from(new Set(tafExercises.map((exercise) => exercise.category)))], [tafExercises]);
+  const visibleExercises = category === "Todas" ? tafExercises : tafExercises.filter((exercise) => exercise.category === category);
   const recordedExercises = new Set(attempts.map((attempt) => attempt.exerciseId));
   const latest = attempts[0];
   const attemptExercise = TAF_EXERCISES.find((exercise) => exercise.id === latest?.exerciseId);
@@ -180,7 +183,7 @@ export default function TafPage({ data, accountId, onSave }: { data: BellaData; 
     <section className="taf-progress" aria-labelledby="taf-progress-title">
       <div className="taf-progress-heading">
         <div><span className="eyebrow">SEU HISTÓRICO EM FOCO</span><h2 id="taf-progress-title"><TrendingUp size={22}/> Evolução das marcas</h2><p>Acompanhe cada resultado registrado, modalidade por modalidade.</p></div>
-        <Field label="ESCOLHA A MODALIDADE"><select value={chartExerciseId} onChange={(event) => setChartExerciseId(event.target.value)}>{TAF_EXERCISES.map((exercise) => <option key={exercise.id} value={exercise.id}>{exercise.name}</option>)}</select></Field>
+        <Field label="ESCOLHA A MODALIDADE"><select value={chartExerciseId} onChange={(event) => setChartExerciseId(event.target.value)}>{tafExercises.map((exercise) => <option key={exercise.id} value={exercise.id}>{exercise.name}</option>)}</select></Field>
       </div>
       <div className="taf-progress-summary" aria-live="polite">
         <Card className="taf-progress-stat"><span className="eyebrow">MARCAS NO GRÁFICO</span><strong>{chartPoints.length}</strong><small>tentativas válidas</small></Card>
@@ -206,7 +209,7 @@ export default function TafPage({ data, accountId, onSave }: { data: BellaData; 
         const personalBest = getTafBest(attempts, exercise);
         const last = attempts.find((attempt) => attempt.exerciseId === exercise.id);
         return <Card className="taf-exercise-card" key={exercise.id}>
-          <DemoArt exercise={exercise} overrideUrl={gifUrls[exercise.id]} uploading={gifUploading === exercise.id} onEdit={() => gifInputs.current[exercise.id]?.click()}/>
+          <DemoArt exercise={exercise} overrideUrl={gifUrls[exercise.id]} uploading={gifUploading === exercise.id} onEdit={() => setEditingExercise(exercise)}/>
           <input ref={(element) => { gifInputs.current[exercise.id] = element; }} type="file" accept="image/gif,.gif" aria-label={`Escolher GIF para ${exercise.name}`} className="exercise-gif-input" onChange={(event) => void uploadGif(exercise, event.currentTarget.files?.[0])}/>
           <div className="taf-card-copy"><Pill tone="neutral">{exercise.category.toUpperCase()}</Pill><h3>{exercise.name}</h3><p>{exercise.purpose}</p><div className="taf-card-muscles"><Dumbbell size={14}/><span>{exercise.muscles}</span></div></div>
           <div className="taf-card-marks"><div><span className="eyebrow"><Trophy size={12}/> MELHOR MARCA</span><strong>{personalBest === null ? "—" : formatTafValue(personalBest, exercise.defaultUnit)}</strong></div>{last && <div className="taf-last-mark"><span>Última · {dateLabel(last.measuredAt)}</span><b>{formatTafValue(last.value, last.unit)}</b></div>}</div>
@@ -233,5 +236,6 @@ export default function TafPage({ data, accountId, onSave }: { data: BellaData; 
         <div className="modal-actions"><Button type="button" variant="outline" onClick={() => setRecording(false)}>VOLTAR</Button><Button type="submit"><ClipboardCheck size={15}/> SALVAR MARCA</Button></div>
       </form>}</div>}
     </Modal>
+    <ExerciseEditorModal exercise={editingExercise} gifUrl={editingExercise ? gifUrls[editingExercise.id] : undefined} gifUploading={editingExercise ? gifUploading === editingExercise.id : false} onClose={() => setEditingExercise(null)} onGifChange={(file) => editingExercise && void uploadGif(editingExercise, file)} onSave={(value) => { if (editingExercise && "metricLabel" in value) { onSaveExercise(editingExercise.id, value as TafExerciseOverride); setEditingExercise(null); } }} onDelete={() => { if (editingExercise) { onDeleteExercise(editingExercise.id); setEditingExercise(null); } }} />
   </div>;
 }

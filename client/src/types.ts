@@ -104,6 +104,18 @@ export interface TafAttempt {
   notes?: string;
 }
 
+export interface TafExerciseOverride {
+  name?: string;
+  category?: string;
+  purpose?: string;
+  muscles?: string;
+  metricLabel?: string;
+  defaultUnit?: TafUnit;
+  unitLabel?: string;
+  higherIsBetter?: boolean;
+  cue?: string;
+}
+
 export interface ActiveWorkout {
   workoutId: string;
   startedAt: string;
@@ -117,6 +129,9 @@ export interface BellaData {
   profile: Profile;
   workouts: Workout[];
   customExercises: ExerciseDefinition[];
+  exerciseOverrides: Record<string, Partial<ExerciseDefinition>>;
+  tafExerciseOverrides: Record<string, TafExerciseOverride>;
+  hiddenExerciseIds: string[];
   favorites: string[];
   schedule: Record<DayKey, string | null>;
   history: WorkoutHistory[];

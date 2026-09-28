@@ -22,7 +22,7 @@ import { appendExerciseToWorkout, assignScheduledWorkout, duplicateWorkout as cr
 import { getDailyWorkoutReminder, reminderStorageKey } from "./lib/notificationService";
 import { appAssetUrl } from "./lib/assetPaths";
 import { EXERCISE_CATALOG, makeId, WORKOUT_COLORS } from "./lib/catalog";
-import type { ActiveWorkout, BellaData, DayKey, ExerciseDefinition, PageId, PerformedSet, TafAttempt, Workout } from "./types";
+import type { ActiveWorkout, BellaData, DayKey, ExerciseDefinition, PageId, PerformedSet, TafAttempt, TafExerciseOverride, Workout } from "./types";
 import { appendTafAttempt } from "./lib/tafService";
 
 export default function App() {
@@ -147,6 +147,30 @@ export default function App() {
     if (!workoutId) return;
     updateData((current) => ({ ...current, workouts: current.workouts.map((workout) => workout.id === workoutId ? appendExerciseToWorkout(workout, exercise) : workout) }));
   }
+  function saveExercise(exercise: ExerciseDefinition) {
+    updateData((current) => current.customExercises.some((item) => item.id === exercise.id)
+      ? { ...current, customExercises: current.customExercises.map((item) => item.id === exercise.id ? exercise : item) }
+      : { ...current, exerciseOverrides: { ...current.exerciseOverrides, [exercise.id]: exercise } });
+    toast.success("Exercício atualizado.");
+  }
+  function deleteExercise(exercise: ExerciseDefinition) {
+    updateData((current) => ({
+      ...current,
+      customExercises: current.customExercises.filter((item) => item.id !== exercise.id),
+      hiddenExerciseIds: current.hiddenExerciseIds.includes(exercise.id) ? current.hiddenExerciseIds : [...current.hiddenExerciseIds, exercise.id],
+      favorites: current.favorites.filter((id) => id !== exercise.id),
+      workouts: current.workouts.map((workout) => ({ ...workout, exercises: workout.exercises.filter((item) => item.id !== exercise.id) })),
+    }));
+    toast.success("Exercício apagado.");
+  }
+  function saveTafExercise(id: string, override: TafExerciseOverride) {
+    updateData((current) => ({ ...current, tafExerciseOverrides: { ...current.tafExerciseOverrides, [id]: override } }));
+    toast.success("Modalidade TAF atualizada.");
+  }
+  function deleteTafExercise(id: string) {
+    updateData((current) => ({ ...current, hiddenExerciseIds: current.hiddenExerciseIds.includes(id) ? current.hiddenExerciseIds : [...current.hiddenExerciseIds, id], tafAttempts: current.tafAttempts.filter((attempt) => attempt.exerciseId !== id) }));
+    toast.success("Modalidade TAF apagada.");
+  }
   function importData(next: BellaData) {
     if (!account || !validateBackup({ format: "bella-fit-backup", version: 1, exportedAt: "", user: { name: "", email: "" }, data: next })) { toast.error("Este arquivo de backup não pôde ser validado."); return; }
     updateData(() => ({ ...next, profile: { ...next.profile, email: account.email }, activeWorkout: null, tafAttempts: next.tafAttempts ?? [] })); toast.success("Backup restaurado no perfil local.");
@@ -175,8 +199,8 @@ export default function App() {
   else if (page === "home") pageContent = <Dashboard data={data} onNavigate={setPage} onStart={startWorkout} onCreate={createWorkout} />;
   else if (page === "workouts") pageContent = <WorkoutsPage data={data} onCreate={createWorkout} onEdit={(workout) => { setEditingId(workout.id); setPage("editor"); }} onDuplicate={duplicateWorkout} onDelete={setDeleteTarget} onStart={startWorkout} />;
   else if (page === "editor" && currentWorkout) pageContent = <WorkoutEditor key={currentWorkout.id} workout={currentWorkout} data={data} onChange={updateWorkout} onBack={() => setPage("workouts")} onFavorite={favorite} />;
-  else if (page === "library") pageContent = <ExerciseLibraryPage data={data} accountId={account.id} onFavorite={favorite} workouts={data.workouts} onAddToWorkout={addExerciseToWorkout} onCreateWorkout={createWorkout} />;
-  else if (page === "taf") pageContent = <TafPage data={data} accountId={account.id} onSave={addTafAttempt} />;
+  else if (page === "library") pageContent = <ExerciseLibraryPage data={data} accountId={account.id} onFavorite={favorite} workouts={data.workouts} onAddToWorkout={addExerciseToWorkout} onCreateWorkout={createWorkout} onSaveExercise={saveExercise} onDeleteExercise={deleteExercise} />;
+  else if (page === "taf") pageContent = <TafPage data={data} accountId={account.id} onSave={addTafAttempt} onSaveExercise={saveTafExercise} onDeleteExercise={deleteTafExercise} />;
   else if (page === "favorites") pageContent = <FavoritesPage data={data} onFavorite={favorite} />;
   else if (page === "history") pageContent = <HistoryPage data={data} />;
   else if (page === "calendar") pageContent = <CalendarPage data={data} onAssign={setSchedule} />;

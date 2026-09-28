@@ -45,7 +45,7 @@ export function createInitialData(name: string, email: string): BellaData {
   return {
     version: 1,
     profile: { name, email, age: "", heightCm: "", weightKg: "", goal: DEFAULT_GOAL },
-    workouts, customExercises: [], favorites: [], schedule,
+    workouts, customExercises: [], exerciseOverrides: {}, tafExerciseOverrides: {}, hiddenExerciseIds: [], favorites: [], schedule,
     history: [],
     settings: { theme: "light", sound: false, vibration: true, restSeconds: 90, weightUnit: "kg", notifications: false },
     activeWorkout: null,
@@ -104,7 +104,13 @@ export function deleteAccount(account: Account): void {
 export function loadData(account: Account): BellaData {
   const data = parseJson<BellaData | null>(localStorage.getItem(storageKey(account.id)), null);
   if (!data || data.version !== 1 || !data.profile || !Array.isArray(data.workouts)) return createInitialData(account.name, account.email);
-  return { ...data, tafAttempts: Array.isArray(data.tafAttempts) ? data.tafAttempts : [] };
+  return {
+    ...data,
+    tafAttempts: Array.isArray(data.tafAttempts) ? data.tafAttempts : [],
+    exerciseOverrides: data.exerciseOverrides && typeof data.exerciseOverrides === "object" ? data.exerciseOverrides : {},
+    tafExerciseOverrides: data.tafExerciseOverrides && typeof data.tafExerciseOverrides === "object" ? data.tafExerciseOverrides : {},
+    hiddenExerciseIds: Array.isArray(data.hiddenExerciseIds) ? data.hiddenExerciseIds : [],
+  };
 }
 export function saveData(account: Account, data: BellaData): void {
   localStorage.setItem(storageKey(account.id), JSON.stringify(data));
