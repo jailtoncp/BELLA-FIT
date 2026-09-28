@@ -16,6 +16,7 @@ import CalendarPage from "./pages/CalendarPage";
 import EvolutionPage from "./pages/EvolutionPage";
 import ProfilePage from "./pages/ProfilePage";
 import SettingsPage from "./pages/SettingsPage";
+import CoachPage from "./pages/CoachPage";
 import { useBellaFit } from "./hooks/useBellaFit";
 import { createInitialData, validateBackup } from "./lib/storageService";
 import { appendExerciseToWorkout, assignScheduledWorkout, duplicateWorkout as createWorkoutCopy, updateWorkoutSchedule } from "./lib/programService";
@@ -201,6 +202,7 @@ export default function App() {
   else if (page === "editor" && currentWorkout) pageContent = <WorkoutEditor key={currentWorkout.id} workout={currentWorkout} data={data} onChange={updateWorkout} onBack={() => setPage("workouts")} onFavorite={favorite} />;
   else if (page === "library") pageContent = <ExerciseLibraryPage data={data} accountId={account.id} onFavorite={favorite} workouts={data.workouts} onAddToWorkout={addExerciseToWorkout} onCreateWorkout={createWorkout} onSaveExercise={saveExercise} onDeleteExercise={deleteExercise} />;
   else if (page === "taf") pageContent = <TafPage data={data} accountId={account.id} onSave={addTafAttempt} onSaveExercise={saveTafExercise} onDeleteExercise={deleteTafExercise} />;
+  else if (page === "coach") pageContent = <CoachPage data={data} accountId={account.id} />;
   else if (page === "favorites") pageContent = <FavoritesPage data={data} onFavorite={favorite} />;
   else if (page === "history") pageContent = <HistoryPage data={data} />;
   else if (page === "calendar") pageContent = <CalendarPage data={data} onAssign={setSchedule} />;

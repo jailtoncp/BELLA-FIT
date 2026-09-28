@@ -1486,3 +1486,44 @@ kbd { padding: 2px 5px; border: 1px solid var(--line); border-radius: 5px; color
 @media (prefers-reduced-motion: reduce) {
   .taf-page *, .taf-page *::before, .taf-page *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
 }
+
+/* Bella Coach */
+.coach-status { display: inline-flex; align-items: center; gap: 7px; padding: 8px 11px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); font-size: 8px; letter-spacing: .08em; font-weight: 700; }
+.coach-status-dot { width: 7px; height: 7px; border-radius: 50%; background: #65a984; box-shadow: 0 0 0 4px #e4f3e9; }
+.coach-layout { display: grid; grid-template-columns: minmax(220px,.75fr) minmax(0,1.55fr); gap: 17px; min-height: 620px; }
+.coach-aside { display: flex; flex-direction: column; gap: 12px; }
+.coach-identity { position: relative; overflow: hidden; padding: 24px 21px; background: linear-gradient(145deg,#fff7fa,#f2e7ee); }
+.coach-identity::after { position: absolute; right: -34px; bottom: -48px; width: 145px; height: 145px; border: 1px solid rgba(200,95,137,.24); border-radius: 50%; content: ""; box-shadow: 0 0 0 20px rgba(200,95,137,.05), 0 0 0 42px rgba(200,95,137,.04); }
+.coach-orb { width: 54px; height: 54px; display: grid; place-items: center; margin-bottom: 19px; border-radius: 17px; color: #fff; background: linear-gradient(145deg,#c85f89,#8f3e63); box-shadow: 0 9px 22px rgba(156,56,99,.22); }
+.coach-identity h2 { max-width: 190px; margin: 9px 0 10px; color: #6d3b51; font-family: "Playfair Display",Georgia,serif; font-size: 26px; line-height: 1.02; }
+.coach-identity p { position: relative; z-index: 1; margin: 0; color: #806a75; font-size: 11px; line-height: 1.6; }
+.coach-safety { position: relative; z-index: 1; display: flex; gap: 7px; align-items: flex-start; margin-top: 24px; padding-top: 13px; border-top: 1px solid rgba(140,75,101,.15); color: #9a7585; font-size: 9px; line-height: 1.45; }
+.coach-context { display: flex; flex-direction: column; gap: 7px; padding: 17px; }
+.coach-context strong { color: var(--ink); font-family: "Playfair Display",Georgia,serif; font-size: 21px; }
+.coach-context span { color: var(--muted); font-size: 10px; }
+.coach-context small { margin-top: 5px; padding-top: 10px; border-top: 1px solid var(--line); color: var(--muted); font-size: 9px; line-height: 1.45; }
+.coach-chat-card { display: flex; flex-direction: column; min-height: 620px; padding: 0; overflow: hidden; }
+.coach-chat-header { display: flex; align-items: center; justify-content: space-between; gap: 15px; padding: 20px 22px; border-bottom: 1px solid var(--line); }
+.coach-chat-header h2 { margin: 5px 0 0; color: var(--ink); font-family: "Playfair Display",Georgia,serif; font-size: 23px; }
+.coach-clear { border: 0; color: var(--muted); background: transparent; font-size: 8px; letter-spacing: .1em; font-weight: 700; cursor: pointer; }
+.coach-messages { display: flex; flex: 1; flex-direction: column; gap: 15px; min-height: 360px; max-height: 475px; padding: 20px 22px; overflow-y: auto; background: linear-gradient(180deg,rgba(255,250,252,.55),transparent); }
+.coach-message-row { display: flex; align-items: flex-start; gap: 9px; max-width: 88%; }
+.coach-message-row.user { align-self: flex-end; flex-direction: row-reverse; }
+.coach-avatar { width: 28px; height: 28px; display: grid; flex: 0 0 auto; place-items: center; border-radius: 10px; color: #fff; background: #c85f89; font-size: 11px; font-weight: 700; }
+.coach-message-row.user .coach-avatar { color: var(--rose-deep); background: var(--rose-pale); }
+.coach-message { padding: 10px 12px; border: 1px solid var(--line); border-radius: 4px 13px 13px 13px; background: var(--white); box-shadow: 0 3px 12px rgba(71,37,51,.03); }
+.coach-message-row.user .coach-message { border-color: transparent; border-radius: 13px 4px 13px 13px; background: var(--rose); color: #fff; }
+.coach-message p { margin: 0; white-space: pre-wrap; color: var(--ink-soft); font-size: 11px; line-height: 1.65; }
+.coach-message-row.user .coach-message p { color: #fff; }
+.coach-speak { display: inline-flex; align-items: center; gap: 4px; margin-top: 8px; padding: 0; border: 0; color: var(--rose-deep); background: transparent; font-size: 8px; letter-spacing: .08em; font-weight: 700; cursor: pointer; }
+.coach-suggestions { display: flex; flex-wrap: wrap; gap: 7px; padding: 0 22px 14px; }
+.coach-suggestions button { padding: 7px 10px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); background: var(--paper); font-size: 9px; cursor: pointer; }
+.coach-suggestions button:hover { border-color: var(--rose); color: var(--rose-deep); }
+.coach-composer { display: flex; align-items: center; gap: 8px; margin: 0 15px; padding: 8px 8px 8px 10px; border: 1px solid var(--line); border-radius: 13px; background: var(--paper); }
+.coach-composer input { min-width: 0; flex: 1; padding: 8px 2px; border: 0; outline: 0; color: var(--ink); background: transparent; font: inherit; font-size: 11px; }
+.coach-mic { width: 32px; height: 32px; display: grid; flex: 0 0 auto; place-items: center; border: 0; border-radius: 9px; color: var(--muted); background: transparent; cursor: pointer; }
+.coach-mic:hover, .coach-mic.active { color: #fff; background: var(--rose); }
+.coach-composer .btn { width: 36px; height: 36px; padding: 0; }
+.coach-audio-note { display: block; padding: 10px 18px 15px; color: var(--muted); font-size: 8px; text-align: center; }
+@media (max-width: 850px) { .coach-layout { grid-template-columns: 1fr; } .coach-aside { display: grid; grid-template-columns: minmax(0,1.2fr) minmax(180px,.8fr); } }
+@media (max-width: 560px) { .coach-status { font-size: 7px; } .coach-aside { display: flex; } .coach-identity { padding: 20px 17px; } .coach-chat-card { min-height: calc(100dvh - 250px); } .coach-chat-header { padding: 17px; } .coach-messages { min-height: 340px; padding: 17px 14px; } .coach-suggestions { padding: 0 14px 12px; } .coach-message-row { max-width: 96%; } .coach-message p { font-size: 12px; } .coach-composer { margin: 0 10px; } }

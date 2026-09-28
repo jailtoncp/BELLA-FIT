@@ -1,4 +1,4 @@
-export type PageId = "home" | "workouts" | "editor" | "library" | "taf" | "favorites" | "history" | "calendar" | "evolution" | "profile" | "settings" | "runner";
+export type PageId = "home" | "workouts" | "editor" | "library" | "taf" | "coach" | "favorites" | "history" | "calendar" | "evolution" | "profile" | "settings" | "runner";
 export type TafUnit = "reps" | "m" | "cm" | "s";
 export type DayKey = "seg" | "ter" | "qua" | "qui" | "sex" | "sab" | "dom";
 export type TrainingMethod = "Repetições" | "Tempo" | "Falha" | "Até a falha" | "Isometria";
