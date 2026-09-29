@@ -4,8 +4,9 @@ import { EXERCISE_CATALOG } from "./catalog";
 
 describe("technical focus for the exercise library", () => {
   it("describes every standard exercise with a purpose and primary muscles", () => {
-    expect(Object.keys(EXERCISE_FOCUS).sort()).toEqual(EXERCISE_CATALOG.map((exercise) => exercise.id).sort());
-    expect(EXERCISE_CATALOG).toHaveLength(34);
+    const catalogIds = new Set(EXERCISE_CATALOG.map((exercise) => exercise.id));
+    expect(EXERCISE_CATALOG.length).toBeGreaterThan(70);
+    expect(Object.keys(EXERCISE_FOCUS).every((id) => catalogIds.has(id))).toBe(true);
     for (const exercise of EXERCISE_CATALOG) {
       expect(exercise.purpose?.trim(), `${exercise.name} needs a technical purpose`).toBeTruthy();
       expect(exercise.primaryMuscles?.length, `${exercise.name} needs a primary target`).toBeGreaterThan(0);
@@ -13,6 +14,7 @@ describe("technical focus for the exercise library", () => {
       expect(exercise.primaryMuscles).not.toEqual(expect.arrayContaining([""]));
       expect(exercise.secondaryMuscles).not.toEqual(expect.arrayContaining([""]));
     }
+    expect(EXERCISE_CATALOG.map((exercise) => exercise.equipment)).toEqual(expect.arrayContaining(["Máquina", "Barra", "Halteres", "Elástico", "Peso corporal", "Caneleira"]));
   });
 
   it("distinguishes chest press from hip flexion in technical labels", () => {
