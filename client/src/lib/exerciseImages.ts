@@ -39,6 +39,14 @@ const manuscriptImages: Record<string, string> = {
   flexao: "/media/exercises/flexao.gif",
   "barra-fixa": "/media/exercises/barra-fixa.gif",
   polichinelo: "/media/exercises/polichinelo.gif",
+
+  // Additional demonstrations found in public exercise-video libraries.
+  // These are intentionally remote so the repository does not have to carry
+  // another large set of binary GIF files.
+  "agachamento-goblet": "https://ymove.app/api/free/a2a797d0-f6f6-436e-8616-6c1d93e73d67?type=video",
+  "agachamento-bulgaro": "https://ymove.app/api/free/9302ad5d-b97a-4b27-afae-611b6ce70a06?type=video",
+  "step-up": "https://ymove.app/api/free/3875dae4-14a6-4533-84d3-ef9acbadbaea?type=video",
+  "levantamento-terra": "/media/exercises/levantamento-terra.gif",
 };
 
 export const EXERCISE_IMAGES: Record<string, string> = Object.fromEntries(
