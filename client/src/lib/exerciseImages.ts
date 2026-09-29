@@ -38,6 +38,7 @@ const manuscriptImages: Record<string, string> = {
   "levantamento-terra": "/media/exercises/levantamento-terra.gif",
   flexao: "/media/exercises/flexao.gif",
   "barra-fixa": "/media/exercises/barra-fixa.gif",
+  polichinelo: "/media/exercises/polichinelo.gif",
 };
 
 export const EXERCISE_IMAGES: Record<string, string> = Object.fromEntries(

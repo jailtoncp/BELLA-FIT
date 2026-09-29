@@ -30,3 +30,4 @@ Os GIFs abaixo foram obtidos da Wikimedia Commons e redistribuídos conforme as 
 - `barra-fixa.gif`: [Pullup.gif](https://commons.wikimedia.org/wiki/File:Pullup.gif), autor Extremistpullup, CC BY-SA 3.0 / GFDL 1.2+.
 
 Todos os links foram consultados em 29/09/2026. Os GIFs são arquivos reais de pessoas; não foram gerados por IA.
+- `polichinelo.gif`: [Jumpingjacks.gif](https://commons.wikimedia.org/wiki/File:Jumpingjacks.gif), autor Wensceslao, CC BY-SA 4.0.
