@@ -39,6 +39,13 @@ const manuscriptImages: Record<string, string> = {
   flexao: "/media/exercises/flexao.gif",
   "barra-fixa": "/media/exercises/barra-fixa.gif",
   polichinelo: "/media/exercises/polichinelo.gif",
+
+  // Demonstrações externas com licença verificável no Wikimedia Commons.
+  "agachamento-frontal": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Zecher-squats-2.gif",
+  "step-up": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Step_up-CDC_strength_training_for_older_adults.gif",
+  "flexao-inclinada": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Pushups_wbs.gif",
+  "abdominal-sit-up": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Situps.gif",
+  "agachamento-unilateral": "https://commons.wikimedia.org/wiki/Special:Redirect/file/One-leg-squat-1.gif",
 };
 
 export const EXERCISE_IMAGES: Record<string, string> = Object.fromEntries(
