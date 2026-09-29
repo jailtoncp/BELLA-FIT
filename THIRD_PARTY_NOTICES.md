@@ -23,11 +23,21 @@ Os metadados do Commons registram `AttributionRequired=false` para ambos, mas Be
 
 # GIFs de exercícios adicionados
 
-Os GIFs abaixo foram obtidos da Wikimedia Commons e redistribuídos conforme as páginas de licença em Creative Commons:
+Os GIFs locais abaixo foram obtidos da Wikimedia Commons e redistribuídos conforme as páginas de licença em Creative Commons:
 
 - `levantamento-terra.gif`: [Man Lifting Barbell Deadlift GIF Animation Loop](https://commons.wikimedia.org/wiki/File:Man_Lifting_Barbell_Deadlift_GIF_Animation_Loop.gif), autor VideoPlasty, CC BY-SA 4.0.
 - `flexao.gif`: [Man Doing Push Ups GIF Animation Loop](https://commons.wikimedia.org/wiki/File:Man_Doing_Push_Ups_GIF_Animation_Loop.gif), autor VideoPlasty, CC BY-SA 4.0.
 - `barra-fixa.gif`: [Pullup.gif](https://commons.wikimedia.org/wiki/File:Pullup.gif), autor Extremistpullup, CC BY-SA 3.0 / GFDL 1.2+.
-
-Todos os links foram consultados em 29/09/2026. Os GIFs são arquivos reais de pessoas; não foram gerados por IA.
 - `polichinelo.gif`: [Jumpingjacks.gif](https://commons.wikimedia.org/wiki/File:Jumpingjacks.gif), autor Wensceslao, CC BY-SA 4.0.
+
+## Demonstrações externas adicionadas à biblioteca
+
+Estas cinco demonstrações são carregadas diretamente do Wikimedia Commons para exercícios que ainda não tinham mídia no Bella Fit. A aplicação mantém a URL da fonte no código para permitir rastreabilidade e não duplica os arquivos binários no repositório.
+
+- **Agachamento frontal:** [Zecher-squats-2.gif](https://commons.wikimedia.org/wiki/File:Zecher-squats-2.gif), autor Everkinetic, CC BY-SA 3.0. É uma variação de front squat/Zecher squat; serve como referência visual do padrão de agachamento frontal.
+- **Step-up:** [Step up — CDC strength training for older adults](https://commons.wikimedia.org/wiki/File:Step_up-CDC_strength_training_for_older_adults.gif), Centers for Disease Control and Prevention, domínio público nos EUA.
+- **Flexão:** [Pushups wbs.gif](https://commons.wikimedia.org/wiki/File:Pushups_wbs.gif), autor Wensceslao, CC BY-SA 4.0.
+- **Abdominal/sit-up:** [Situps.gif](https://commons.wikimedia.org/wiki/File:Situps.gif), Wikimedia Commons; licença indicada na página do arquivo.
+- **Agachamento unilateral:** [One-leg-squat-1.gif](https://commons.wikimedia.org/wiki/File:One-leg-squat-1.gif), autor Everkinetic, CC BY-SA 3.0.
+
+Os GIFs externos foram escolhidos por apresentarem o movimento em loop e por terem uma página de licença/proveniência verificável. Eles são demonstrações visuais de referência e não substituem orientação profissional.
