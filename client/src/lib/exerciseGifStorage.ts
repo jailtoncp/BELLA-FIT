@@ -2,6 +2,7 @@ const DATABASE_NAME = "bella-fit-local-media";
 const DATABASE_VERSION = 1;
 const STORE_NAME = "exercise-gifs";
 export const MAX_EXERCISE_GIF_BYTES = 12 * 1024 * 1024;
+export const MAX_EXERCISE_MEDIA_BYTES = MAX_EXERCISE_GIF_BYTES;
 
 type StoredExerciseGif = {
   key: string;
@@ -28,12 +29,20 @@ function openDatabase(): Promise<IDBDatabase> {
   });
 }
 
-export async function validateExerciseGif(file: File): Promise<void> {
-  if (!file.size) throw new Error("O arquivo GIF está vazio.");
-  if (file.size > MAX_EXERCISE_GIF_BYTES) throw new Error("Escolha um GIF de até 12 MB para manter o app leve no celular.");
-  const signature = await file.slice(0, 6).text();
-  if (signature !== "GIF87a" && signature !== "GIF89a") throw new Error("Esse arquivo não parece ser um GIF válido. Escolha um arquivo .gif animado.");
+export async function validateExerciseMedia(file: File): Promise<void> {
+  if (!file.size) throw new Error("O arquivo de imagem está vazio.");
+  if (file.size > MAX_EXERCISE_MEDIA_BYTES) throw new Error("Escolha um GIF ou imagem de até 12 MB para manter o app leve no celular.");
+  const bytes = new Uint8Array(await file.slice(0, 12).arrayBuffer());
+  const text = new TextDecoder().decode(bytes);
+  const isGif = text.startsWith("GIF87a") || text.startsWith("GIF89a");
+  const isPng = bytes.length >= 8 && bytes[0] === 0x89 && text.slice(1, 4) === "PNG";
+  const isJpeg = bytes.length >= 3 && bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff;
+  const isWebp = text.slice(0, 4) === "RIFF" && text.slice(8, 12) === "WEBP";
+  if (!isGif && !isPng && !isJpeg && !isWebp) throw new Error("Esse arquivo não parece ser um GIF válido ou imagem válida. Escolha GIF, PNG, JPEG ou WEBP.");
 }
+
+/** Compatibilidade com chamadas antigas: agora também aceita imagens estáticas. */
+export const validateExerciseGif = validateExerciseMedia;
 
 export async function saveExerciseGif(accountId: string, exerciseId: string, blob: Blob): Promise<void> {
   const database = await openDatabase();
