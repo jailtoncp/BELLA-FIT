@@ -40,12 +40,47 @@ const manuscriptImages: Record<string, string> = {
   "barra-fixa": "/media/exercises/barra-fixa.gif",
   polichinelo: "/media/exercises/polichinelo.gif",
 
-  // Demonstrações externas com licença verificável no Wikimedia Commons.
+  // Wikimedia Commons: demonstrações em GIF com licenças verificáveis.
   "agachamento-frontal": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Zecher-squats-2.gif",
   "step-up": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Step_up-CDC_strength_training_for_older_adults.gif",
   "flexao-inclinada": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Pushups_wbs.gif",
   "abdominal-sit-up": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Situps.gif",
   "agachamento-unilateral": "https://commons.wikimedia.org/wiki/Special:Redirect/file/One-leg-squat-1.gif",
+
+  // Novos GIFs para exercícios que estavam sem demonstração.
+  "panturrilha-sentado": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Seated-calf-raise-1.gif",
+  "panturrilha-unilateral": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Seated-one-leg-calf-raise-2.gif",
+  "triceps-corda": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Triceps-pushdown-with-rope-1.gif",
+  "rosca-scott": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Biceps-curl-CDC_strength_training_for_older_adults.gif",
+  "rosca-cabo": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Biceps-curl-CDC_strength_training_for_older_adults.gif",
+  "rosca-elastico": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Biceps-curl-CDC_strength_training_for_older_adults.gif",
+  "triceps-coice": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Triceps-extensions-1.gif",
+  "supino-maquina": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Chest_press-CDC_strength_training_for_older_adults.gif",
+  "desenvolvimento-maquina": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Shoulder_press_-_exercise_demonstration_video.webm",
+  "elevacao-lateral-cabo": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Standing-lateral-raise-1.gif",
+  "supino-inclinado": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Incline-chest-press-1.gif",
+  "mesa-flexora": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Lying-leg-curl-1.gif",
+  "agachamento-goblet": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Kettlebell_Goblet_Squat.webm",
+  "good-morning": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Good-morning-1.gif",
+  "terra-sumo": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Deadlift-1.gif",
+  "remada-maquina": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Seated-row-1.gif",
+  "puxada-neutra": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Lat-pulldown-1.gif",
+  "encolhimento": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Barbell-shrug-1.gif",
+  "posterior-maquina": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Reverse-fly-1.gif",
+  "crucifixo-maquina": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Chest-fly-1.gif",
+  "mergulho-banco": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Bench-dips-1.gif",
+  "abdominal-cabo": "/manus-storage/abdominal_41ec89d4.gif",
+  "abdominal-roda": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Ab-wheel-1.gif",
+  "prancha-lateral": "/manus-storage/prancha_ab4633a6.gif",
+  "dead-bug": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Dead-bug-1.gif",
+  "bird-dog": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Bird-dog-1.gif",
+  "mountain-climber": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Mountain-climber-1.gif",
+  "kickback-elastico": "/manus-storage/coice_0b326a3a.gif",
+  "abducao-elastico": "/manus-storage/abducao_dc306907.gif",
+  "glute-bridge-elastico": "/manus-storage/glute-bridge_d7364c5f.gif",
+  "agachamento-bulgaro": "https://commons.wikimedia.org/wiki/Special:Redirect/file/One-leg-squat-1.gif",
+  "caminhada-elastico": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Lateral-band-walk-1.gif",
+  "levantamento-lateral-caneleira": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Side-lying-leg-raise-1.gif",
 };
 
 export const EXERCISE_IMAGES: Record<string, string> = Object.fromEntries(
