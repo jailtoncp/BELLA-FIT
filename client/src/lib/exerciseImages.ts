@@ -35,6 +35,9 @@ const manuscriptImages: Record<string, string> = {
   abdominal: "/manus-storage/abdominal_41ec89d4.gif",
   prancha: "/manus-storage/prancha_ab4633a6.gif",
   "elevacao-pernas": "/manus-storage/elevacao-pernas_2059e679.gif",
+  "levantamento-terra": "/media/exercises/levantamento-terra.gif",
+  flexao: "/media/exercises/flexao.gif",
+  "barra-fixa": "/media/exercises/barra-fixa.gif",
 };
 
 export const EXERCISE_IMAGES: Record<string, string> = Object.fromEntries(

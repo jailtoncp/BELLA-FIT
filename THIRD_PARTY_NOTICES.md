@@ -20,3 +20,13 @@ Além dos GIFs esquemáticos originais, estas duas modalidades usam versões oti
 - **Flexão de braços:** United States Navy SEALs, vídeo da demonstração de técnica de push-up pelo diretor de preparo físico da Naval Special Warfare. [Arquivo-fonte e metadados](https://commons.wikimedia.org/wiki/File:Navy-seal-buds-training-push-ups.ogv). Commons identifica a obra como domínio público nos Estados Unidos (PD-USGov-Military-Navy; trabalho oficial de funcionário da Marinha dos EUA). `push-up-real.gif` reproduz um ciclo curto da demonstração, sem áudio, em 300 px e 7 fps. A classificação de domínio público da fonte dos EUA não resolve necessariamente direitos em toda jurisdição; Bella Fit mantém o link e o crédito da origem visíveis.
 
 Os metadados do Commons registram `AttributionRequired=false` para ambos, mas Bella Fit mantém crédito informativo e links para os autores/fontes. O script `scripts/optimize-taf-human-gifs.sh` reproduz os recortes e as versões leves a partir das URLs de origem. Nenhum candidato sem licença verificável ou incompatível com o movimento do teste foi adotado.
+
+# GIFs de exercícios adicionados
+
+Os GIFs abaixo foram obtidos da Wikimedia Commons e redistribuídos conforme as páginas de licença em Creative Commons:
+
+- `levantamento-terra.gif`: [Man Lifting Barbell Deadlift GIF Animation Loop](https://commons.wikimedia.org/wiki/File:Man_Lifting_Barbell_Deadlift_GIF_Animation_Loop.gif), autor VideoPlasty, CC BY-SA 4.0.
+- `flexao.gif`: [Man Doing Push Ups GIF Animation Loop](https://commons.wikimedia.org/wiki/File:Man_Doing_Push_Ups_GIF_Animation_Loop.gif), autor VideoPlasty, CC BY-SA 4.0.
+- `barra-fixa.gif`: [Pullup.gif](https://commons.wikimedia.org/wiki/File:Pullup.gif), autor Extremistpullup, CC BY-SA 3.0 / GFDL 1.2+.
+
+Todos os links foram consultados em 29/09/2026. Os GIFs são arquivos reais de pessoas; não foram gerados por IA.
