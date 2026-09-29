@@ -10,5 +10,8 @@ export const HERO_IMAGE_URL = isGitHubPagesBuild
   : "/manus-storage/bella-fit-training-hero_303e3ce8.jpg";
 
 export function exerciseImageUrl(key: string, manuscriptUrl: string): string {
+  // External exercise GIFs are kept as remote URLs. Local manuscript assets
+  // continue to resolve to the bundled GitHub Pages files.
+  if (/^https?:\/\//i.test(manuscriptUrl)) return manuscriptUrl;
   return isGitHubPagesBuild ? appAssetUrl(`media/exercises/${key}.gif`) : manuscriptUrl;
 }
