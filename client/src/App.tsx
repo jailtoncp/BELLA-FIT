@@ -23,7 +23,7 @@ import { appendExerciseToWorkout, assignScheduledWorkout, duplicateWorkout as cr
 import { getDailyWorkoutReminder, reminderStorageKey } from "./lib/notificationService";
 import { appAssetUrl } from "./lib/assetPaths";
 import { EXERCISE_CATALOG, makeId, WORKOUT_COLORS } from "./lib/catalog";
-import type { ActiveWorkout, BellaData, DayKey, ExerciseDefinition, PageId, PerformedSet, TafAttempt, TafExerciseOverride, Workout } from "./types";
+import type { ActiveWorkout, BellaData, CustomTafExercise, DayKey, ExerciseDefinition, PageId, PerformedSet, TafAttempt, TafExerciseOverride, Workout } from "./types";
 import { appendTafAttempt } from "./lib/tafService";
 
 export default function App() {
@@ -174,7 +174,7 @@ export default function App() {
   }
   function importData(next: BellaData) {
     if (!account || !validateBackup({ format: "bella-fit-backup", version: 1, exportedAt: "", user: { name: "", email: "" }, data: next })) { toast.error("Este arquivo de backup não pôde ser validado."); return; }
-    updateData(() => ({ ...next, profile: { ...next.profile, email: account.email }, activeWorkout: null, tafAttempts: next.tafAttempts ?? [] })); toast.success("Backup restaurado no perfil local.");
+    updateData(() => ({ ...next, profile: { ...next.profile, email: account.email }, activeWorkout: null, tafAttempts: next.tafAttempts ?? [], customTafExercises: next.customTafExercises ?? [] })); toast.success("Backup restaurado no perfil local.");
   }
   function resetData() {
     if (!account) return;
@@ -186,6 +186,9 @@ export default function App() {
   }
   function addTafAttempt(attempt: TafAttempt) {
     updateData((current) => ({ ...current, tafAttempts: appendTafAttempt(current.tafAttempts, attempt) }));
+  }
+  function addCustomTafExercise(exercise: CustomTafExercise) {
+    updateData((current) => current.customTafExercises.some((item) => item.id === exercise.id) ? current : { ...current, customTafExercises: [...current.customTafExercises, exercise] });
   }
   function pickSearchResult(exercise: ExerciseDefinition) {
     setSearchValue(""); setPage("library");
@@ -201,7 +204,7 @@ export default function App() {
   else if (page === "workouts") pageContent = <WorkoutsPage data={data} onCreate={createWorkout} onEdit={(workout) => { setEditingId(workout.id); setPage("editor"); }} onDuplicate={duplicateWorkout} onDelete={setDeleteTarget} onStart={startWorkout} />;
   else if (page === "editor" && currentWorkout) pageContent = <WorkoutEditor key={currentWorkout.id} workout={currentWorkout} data={data} onChange={updateWorkout} onBack={() => setPage("workouts")} onFavorite={favorite} />;
   else if (page === "library") pageContent = <ExerciseLibraryPage data={data} accountId={account.id} onFavorite={favorite} workouts={data.workouts} onAddToWorkout={addExerciseToWorkout} onCreateWorkout={createWorkout} onSaveExercise={saveExercise} onDeleteExercise={deleteExercise} />;
-  else if (page === "taf") pageContent = <TafPage data={data} accountId={account.id} onSave={addTafAttempt} onSaveExercise={saveTafExercise} onDeleteExercise={deleteTafExercise} />;
+  else if (page === "taf") pageContent = <TafPage data={data} accountId={account.id} onSave={addTafAttempt} onCreate={addCustomTafExercise} onSaveExercise={saveTafExercise} onDeleteExercise={deleteTafExercise} />;
   else if (page === "coach") pageContent = <CoachPage data={data} accountId={account.id} />;
   else if (page === "favorites") pageContent = <FavoritesPage data={data} onFavorite={favorite} />;
   else if (page === "history") pageContent = <HistoryPage data={data} />;

@@ -44,6 +44,14 @@ export async function validateExerciseMedia(file: File): Promise<void> {
 /** Compatibilidade com chamadas antigas: agora também aceita imagens estáticas. */
 export const validateExerciseGif = validateExerciseMedia;
 
+/** Strict GIF validation for new exercises that promise an animated demo. */
+export async function validateAnimatedExerciseGif(file: File): Promise<void> {
+  if (!file.size) throw new Error("O arquivo GIF está vazio.");
+  if (file.size > MAX_EXERCISE_GIF_BYTES) throw new Error("Escolha um GIF de até 12 MB para manter o app leve no celular.");
+  const header = new TextDecoder().decode(new Uint8Array(await file.slice(0, 6).arrayBuffer()));
+  if (header !== "GIF87a" && header !== "GIF89a") throw new Error("Escolha um arquivo GIF animado válido.");
+}
+
 export async function saveExerciseGif(accountId: string, exerciseId: string, blob: Blob): Promise<void> {
   const database = await openDatabase();
   await new Promise<void>((resolve, reject) => {

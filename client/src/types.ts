@@ -116,6 +116,21 @@ export interface TafExerciseOverride {
   cue?: string;
 }
 
+export interface CustomTafExercise {
+  id: string;
+  name: string;
+  category: string;
+  purpose: string;
+  muscles: string;
+  metricLabel: string;
+  defaultUnit: TafUnit;
+  unitLabel: string;
+  higherIsBetter: boolean;
+  demo: "push-up";
+  cue: string;
+  custom: true;
+}
+
 export interface ActiveWorkout {
   workoutId: string;
   startedAt: string;
@@ -138,6 +153,7 @@ export interface BellaData {
   settings: Settings;
   activeWorkout: ActiveWorkout | null;
   tafAttempts: TafAttempt[];
+  customTafExercises: CustomTafExercise[];
 }
 
 export interface BackupFile {

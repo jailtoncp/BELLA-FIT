@@ -2,7 +2,7 @@
 
 ## Demonstrações de exercícios
 
-Os 34 GIFs em `github-pages-assets/exercises/` foram produzidos a partir dos frames correspondentes a exercícios do [Free Exercise DB](https://github.com/yuhonas/free-exercise-db), conjunto que declara publicação sob a licença [The Unlicense](https://unlicense.org/). Os frames originais foram redimensionados e combinados em GIFs curtos. Os nomes e textos da interface em português são conteúdo do Bella Fit.
+Os 53 GIFs em `github-pages-assets/exercises/` foram produzidos a partir dos pares de imagens correspondentes a exercícios do [Free Exercise DB](https://github.com/yuhonas/free-exercise-db), conjunto que declara publicação sob a licença [The Unlicense](https://unlicense.org/). Os frames originais foram redimensionados e combinados em GIFs curtos. Os nomes e textos da interface em português são conteúdo do Bella Fit.
 
 No preview Manus, os arquivos equivalentes continuam sendo servidos pelo armazenamento gerenciado do WebDev. No GitHub Pages, a build usa os GIFs locais incluídos neste repositório.
 
@@ -39,5 +39,14 @@ Estas cinco demonstrações são carregadas diretamente do Wikimedia Commons par
 - **Flexão:** [Pushups wbs.gif](https://commons.wikimedia.org/wiki/File:Pushups_wbs.gif), autor Wensceslao, CC BY-SA 4.0.
 - **Abdominal/sit-up:** [Situps.gif](https://commons.wikimedia.org/wiki/File:Situps.gif), Wikimedia Commons; licença indicada na página do arquivo.
 - **Agachamento unilateral:** [One-leg-squat-1.gif](https://commons.wikimedia.org/wiki/File:One-leg-squat-1.gif), autor Everkinetic, CC BY-SA 3.0.
+
+## Demonstrações adicionais de movimentos
+
+Os GIFs `abducao-elastico.gif`, `agachamento-bulgaro.gif`, `agachamento-frontal.gif`, `agachamento-goblet.gif`, `mesa-flexora.gif`, `kickback-elastico.gif`, `glute-bridge-elastico.gif`, `good-morning.gif`, `terra-sumo.gif`, `panturrilha-sentado.gif`, `panturrilha-unilateral.gif`, `pullover-cabo.gif`, `puxada-neutra.gif`, `remada-maquina.gif`, `face-pull.gif`, `supino-maquina.gif` e `flexao-inclinada.gif` são GIFs originais produzidos para o Bella Fit a partir de folhas de quadros geradas por IA. A atleta é uma personagem fictícia com aparência humana realista; os quadros não são fotografia ou filmagem de uma pessoa real. As folhas foram convertidas em GIFs de seis quadros, redimensionados e otimizados para menos de 1 MB por arquivo. O script reproduzível está em `scripts/exercise-gif-from-sheet.py`.
+- `step-up.gif`: [Step up—CDC strength training for older adults](https://commons.wikimedia.org/wiki/File:Step_up-CDC_strength_training_for_older_adults.gif), Centers for Disease Control and Prevention (CDC), obra do governo federal dos Estados Unidos em domínio público. O crédito é informativo e não é exigido pela licença; [base de direitos governamentais dos EUA](https://www.usa.gov/government-works).
+
+Os 19 GIFs adicionais (`encolhimento.gif`, `supino-inclinado.gif`, `crucifixo-maquina.gif`, `desenvolvimento-maquina.gif`, `elevacao-lateral-cabo.gif`, `posterior-maquina.gif`, `rosca-scott.gif`, `rosca-cabo.gif`, `triceps-corda.gif`, `triceps-coice.gif`, `mergulho-banco.gif`, `abdominal-cabo.gif`, `abdominal-roda.gif`, `dead-bug.gif`, `mountain-climber.gif`, `caminhada-elastico.gif`, `rosca-elastico.gif`, `prancha-lateral.gif` e `levantamento-lateral-caneleira.gif`) usam pares de imagens com o mesmo nome de exercício no Free Exercise DB. A licença declarada para o conjunto é The Unlicense; as adaptações estão em 320 × 240 px e abaixo de 1 MB. O conversor reproduzível está em `scripts/exercise-gif-from-freedb.py`. A variação “rosca com elástico” usa a demonstração de rosca com barra EZ e faixa elástica.
+
+O GIF `bird-dog.gif` alterna três posições bilaterais fotografadas por PTPioneer. As fotos originais foram publicadas no Wikimedia Commons sob [CC BY 2.0](https://creativecommons.org/licenses/by/2.0/): [Bird dog exercise](https://commons.wikimedia.org/wiki/File:Bird_dog_exercise.jpg), [Bird dog yoga pose](https://commons.wikimedia.org/wiki/File:Girl_doing_bird_dog_yoga_pose.jpg) e [Bird dog yoga pose 2](https://commons.wikimedia.org/wiki/File:Girl_doing_bird_dog_yoga_pose_2.jpg). O Bella Fit redimensiona e combina as fotos num GIF leve; a animação alterna poses estáticas e não é um vídeo nem uma captura contínua de movimento.
 
 Os GIFs externos foram escolhidos por apresentarem o movimento em loop e por terem uma página de licença/proveniência verificável. Eles são demonstrações visuais de referência e não substituem orientação profissional.

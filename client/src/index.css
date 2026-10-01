@@ -1321,6 +1321,9 @@ kbd { padding: 2px 5px; border: 1px solid var(--line); border-radius: 5px; color
 .taf-section-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 15px; margin: 0 0 13px; }
 .taf-section-heading h2 { margin: 5px 0 0; font-family: "Playfair Display",Georgia,serif; font-size: 25px; font-weight: 500; }
 .taf-section-heading > .field { width: 225px; }
+.taf-section-actions { display: flex; align-items: flex-end; gap: 10px; }
+.taf-section-actions > .field { width: 225px; }
+.taf-section-actions > .btn { min-height: 40px; white-space: nowrap; }
 .taf-section-heading > .field select { min-height: 40px; }
 .taf-exercise-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); align-items: start; gap: 14px; }
 .taf-exercise-card { overflow: hidden; padding-bottom: 13px; }
@@ -1464,6 +1467,12 @@ kbd { padding: 2px 5px; border: 1px solid var(--line); border-radius: 5px; color
   .taf-section-heading { align-items: flex-start; flex-direction: column; gap: 10px; }
   .taf-section-heading h2 { font-size: 23px; }
   .taf-section-heading > .field { width: 100%; }
+  .taf-section-actions { width: 100%; align-items: stretch; flex-direction: column; gap: 9px; }
+  .taf-section-actions > .field { width: 100%; }
+  .taf-section-actions > .btn { min-height: 44px; justify-content: center; }
+  .custom-taf-form { gap: 11px; }
+  .custom-taf-form .custom-two-cols { grid-template-columns: 1fr 1fr; gap: 9px; }
+  .custom-taf-form .modal-actions .btn { min-height: 46px; }
   .taf-exercise-grid { grid-template-columns: minmax(0,1fr); gap: 12px; }
   .taf-demo { height: 180px; }
   .taf-card-copy { padding: 13px 14px 8px; }

@@ -1,4 +1,4 @@
-import type { TafAttempt, TafUnit } from "../types";
+import type { CustomTafExercise, TafAttempt, TafUnit } from "../types";
 
 export type TafDemoKind = "rower" | "distance-run" | "sprint" | "static-bar" | "pull-up" | "jump" | "rope" | "shuttle" | "push-up";
 
@@ -28,6 +28,12 @@ export const TAF_EXERCISES: TafExercise[] = [
   { id: "shuttle-run", name: "Shuttle run", category: "Agilidade", purpose: "Deslocamento com mudanças de direção entre marcas; distância, número de percursos e cronometragem devem seguir o edital.", muscles: "Membros inferiores, core e musculatura estabilizadora", metricLabel: "Tempo", defaultUnit: "s", unitLabel: "s", higherIsBetter: false, demo: "shuttle", cue: "Anote o percurso usado para que resultados diferentes não sejam confundidos." },
   { id: "flexao-solo", name: "Flexão de braços no solo", category: "Força e resistência", purpose: "Empurrada horizontal com o peso corporal; posição e amplitude consideradas válidas variam entre provas.", muscles: "Peitoral maior, tríceps braquial, deltoide anterior e estabilizadores do tronco", metricLabel: "Repetições válidas", defaultUnit: "reps", unitLabel: "reps", higherIsBetter: true, demo: "push-up", cue: "Registre apenas repetições válidas segundo o regulamento do seu concurso." },
 ];
+
+export function createCustomTafExercise(id: string, name: string, description: string, unit: TafUnit, higherIsBetter: boolean): CustomTafExercise {
+  const metricLabels: Record<TafUnit, string> = { reps: "Repetições", m: "Distância", cm: "Distância", s: "Tempo" };
+  const unitLabels: Record<TafUnit, string> = { reps: "reps", m: "m", cm: "cm", s: "s" };
+  return { id, name: name.trim(), category: "Personalizado", purpose: description.trim(), muscles: "Modalidade personalizada", metricLabel: metricLabels[unit], defaultUnit: unit, unitLabel: unitLabels[unit], higherIsBetter, demo: "push-up", cue: `Use sempre a mesma unidade (${unitLabels[unit]}) e registre conforme a descrição informada.`, custom: true };
+}
 
 export function appendTafAttempt(attempts: TafAttempt[], attempt: TafAttempt): TafAttempt[] {
   return [...attempts, attempt].sort((a, b) => b.measuredAt.localeCompare(a.measuredAt));

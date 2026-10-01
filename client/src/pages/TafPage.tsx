@@ -1,12 +1,13 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Activity, CalendarDays, ClipboardCheck, Dumbbell, Footprints, Info, LoaderCircle, MapPin, Pencil, Plus, Ruler, Timer, TrendingUp, Trophy, X } from "lucide-react";
+import { Activity, CalendarDays, ClipboardCheck, Dumbbell, Footprints, ImagePlus, Info, LoaderCircle, MapPin, Pencil, Plus, Ruler, Timer, TrendingUp, Trophy, X } from "lucide-react";
 import { CartesianGrid, Line, LineChart, ReferenceDot, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-import type { BellaData, TafAttempt, TafExerciseOverride } from "../types";
+import type { BellaData, TafAttempt, TafExerciseOverride, TafUnit } from "../types";
 import { Button, Card, Field, Modal, PageHeading, Pill } from "../components/common";
-import { formatTafValue, getTafBest, getTafProgressPoints, TAF_EXERCISES, type TafDemoKind, type TafExercise } from "../lib/tafService";
+import { createCustomTafExercise, formatTafValue, getTafBest, getTafProgressPoints, TAF_EXERCISES, type TafDemoKind, type TafExercise } from "../lib/tafService";
+import { makeId } from "../lib/catalog";
 import { TAF_SOURCES } from "../lib/tafSources";
 import { TAF_MEDIA } from "../lib/tafMedia";
-import { loadExerciseGifs, saveExerciseGif, validateExerciseGif } from "../lib/exerciseGifStorage";
+import { loadExerciseGifs, saveExerciseGif, validateAnimatedExerciseGif } from "../lib/exerciseGifStorage";
 import ExerciseEditorModal from "../components/ExerciseEditorModal";
 
 function localDateInputValue() {
@@ -80,7 +81,7 @@ function DemoArt({ exercise, overrideUrl, onEdit, uploading }: { exercise: TafEx
   </div>;
 }
 
-export default function TafPage({ data, accountId, onSave, onSaveExercise, onDeleteExercise }: { data: BellaData; accountId: string; onSave: (attempt: TafAttempt) => void; onSaveExercise: (id: string, override: TafExerciseOverride) => void; onDeleteExercise: (id: string) => void }) {
+export default function TafPage({ data, accountId, onSave, onCreate, onSaveExercise, onDeleteExercise }: { data: BellaData; accountId: string; onSave: (attempt: TafAttempt) => void; onCreate: (exercise: BellaData["customTafExercises"][number]) => void; onSaveExercise: (id: string, override: TafExerciseOverride) => void; onDeleteExercise: (id: string) => void }) {
   const [category, setCategory] = useState("Todas");
   const [chartExerciseId, setChartExerciseId] = useState(TAF_EXERCISES[0].id);
   const [activeExercise, setActiveExercise] = useState<TafExercise | null>(null);
@@ -94,10 +95,23 @@ export default function TafPage({ data, accountId, onSave, onSaveExercise, onDel
   const [gifUrls, setGifUrls] = useState<Record<string, string>>({});
   const [gifUploading, setGifUploading] = useState<string | null>(null);
   const [gifError, setGifError] = useState("");
+  const [customOpen, setCustomOpen] = useState(false);
+  const [customName, setCustomName] = useState("");
+  const [customDescription, setCustomDescription] = useState("");
+  const [customUnit, setCustomUnit] = useState<TafUnit>("reps");
+  const [customDirection, setCustomDirection] = useState<"higher" | "lower">("higher");
+  const [customGif, setCustomGif] = useState<File | null>(null);
+  const [customError, setCustomError] = useState("");
+  const [savingCustom, setSavingCustom] = useState(false);
   const gifInputs = useRef<Record<string, HTMLInputElement | null>>({});
+  const customGifInput = useRef<HTMLInputElement | null>(null);
   const objectUrls = useRef(new Set<string>());
+  function clearCustomGif() { setCustomGif(null); if (customGifInput.current) customGifInput.current.value = ""; }
   const attempts = data.tafAttempts ?? [];
-  const tafExercises = useMemo(() => TAF_EXERCISES.filter((exercise) => !data.hiddenExerciseIds.includes(exercise.id)).map((exercise) => ({ ...exercise, ...(data.tafExerciseOverrides[exercise.id] ?? {}) })), [data.hiddenExerciseIds, data.tafExerciseOverrides]);
+  const tafExercises = useMemo<TafExercise[]>(() => [
+    ...TAF_EXERCISES.filter((exercise) => !data.hiddenExerciseIds.includes(exercise.id)).map((exercise) => ({ ...exercise, ...(data.tafExerciseOverrides[exercise.id] ?? {}) })),
+    ...data.customTafExercises.filter((exercise) => !data.hiddenExerciseIds.includes(exercise.id)),
+  ], [data.customTafExercises, data.hiddenExerciseIds, data.tafExerciseOverrides]);
   const chartExercise = tafExercises.find((exercise) => exercise.id === chartExerciseId) ?? tafExercises[0] ?? TAF_EXERCISES[0];
   const chartPoints = useMemo(() => getTafProgressPoints(attempts, chartExercise), [attempts, chartExercise]);
   const chartBest = getTafBest(attempts, chartExercise);
@@ -113,7 +127,7 @@ export default function TafPage({ data, accountId, onSave, onSaveExercise, onDel
   const visibleExercises = category === "Todas" ? tafExercises : tafExercises.filter((exercise) => exercise.category === category);
   const recordedExercises = new Set(attempts.map((attempt) => attempt.exerciseId));
   const latest = attempts[0];
-  const attemptExercise = TAF_EXERCISES.find((exercise) => exercise.id === latest?.exerciseId);
+  const attemptExercise = tafExercises.find((exercise) => exercise.id === latest?.exerciseId);
   const recentAttempts = attempts.slice(0, 8);
 
   useEffect(() => {
@@ -143,7 +157,7 @@ export default function TafPage({ data, accountId, onSave, onSaveExercise, onDel
     setGifUploading(exercise.id);
     setGifError("");
     try {
-      await validateExerciseGif(file);
+      await validateAnimatedExerciseGif(file);
       await saveExerciseGif(accountId, exercise.id, file);
       const nextUrl = URL.createObjectURL(file);
       objectUrls.current.add(nextUrl);
@@ -158,6 +172,31 @@ export default function TafPage({ data, accountId, onSave, onSaveExercise, onDel
       setGifUploading(null);
       const input = gifInputs.current[exercise.id];
       if (input) input.value = "";
+    }
+  }
+
+  async function createManualTafExercise(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setCustomError("");
+    if (!customName.trim()) { setCustomError("Digite um nome para a modalidade."); return; }
+    if (!customDescription.trim()) { setCustomError("Descreva como essa modalidade é realizada."); return; }
+    if (!customGif) { setCustomError("Escolha um GIF demonstrativo para a modalidade."); return; }
+    const exercise = createCustomTafExercise(makeId("custom-taf"), customName, customDescription, customUnit, customDirection === "higher");
+    setSavingCustom(true);
+    try {
+      await validateAnimatedExerciseGif(customGif);
+      await saveExerciseGif(accountId, exercise.id, customGif);
+      const url = URL.createObjectURL(customGif);
+      objectUrls.current.add(url);
+      setGifUrls((current) => ({ ...current, [exercise.id]: url }));
+      onCreate(exercise);
+      setChartExerciseId(exercise.id);
+      setCustomOpen(false);
+      setCustomName(""); setCustomDescription(""); setCustomUnit("reps"); setCustomDirection("higher"); clearCustomGif();
+    } catch (error) {
+      setCustomError(error instanceof Error ? error.message : "Não foi possível salvar o GIF neste dispositivo.");
+    } finally {
+      setSavingCustom(false);
     }
   }
 
@@ -179,7 +218,7 @@ export default function TafPage({ data, accountId, onSave, onSaveExercise, onDel
   return <div className="page taf-page">
     <PageHeading eyebrow="TREINO DE APTIDÃO FÍSICA" title={<>Preparação para o <em>TAF</em></>} description="Acompanhe suas marcas nas provas físicas presentes em concursos policiais. Cada edital define o próprio protocolo." actions={<Pill tone="rose"><ClipboardCheck size={13}/> ÁREA EXCLUSIVA TAF</Pill>}/>
     <div className="taf-notice" role="note"><Info size={18}/><p><strong>Sem índices universais.</strong> As modalidades, a execução e os critérios mudam entre concursos. Use a área para registrar seus próprios resultados e confirme cada regra no edital vigente.</p></div>
-    <div className="taf-stats" aria-label="Resumo do acompanhamento TAF"><Card className="taf-stat"><span className="taf-stat-icon"><ClipboardCheck size={18}/></span><span className="eyebrow">TENTATIVAS REGISTRADAS</span><strong>{attempts.length}</strong><small>no seu perfil local</small></Card><Card className="taf-stat"><span className="taf-stat-icon"><Activity size={18}/></span><span className="eyebrow">MODALIDADES ACOMPANHADAS</span><strong>{recordedExercises.size}<small>/{TAF_EXERCISES.length}</small></strong><small>com ao menos uma marca</small></Card><Card className="taf-stat taf-stat-last"><span className="taf-stat-icon"><CalendarDays size={18}/></span><span className="eyebrow">ÚLTIMA TENTATIVA</span><strong className="taf-stat-date">{latest ? dateLabel(latest.measuredAt) : "—"}</strong><small>{attemptExercise?.name ?? "Registre sua primeira marca"}</small></Card></div>
+    <div className="taf-stats" aria-label="Resumo do acompanhamento TAF"><Card className="taf-stat"><span className="taf-stat-icon"><ClipboardCheck size={18}/></span><span className="eyebrow">TENTATIVAS REGISTRADAS</span><strong>{attempts.length}</strong><small>no seu perfil local</small></Card><Card className="taf-stat"><span className="taf-stat-icon"><Activity size={18}/></span><span className="eyebrow">MODALIDADES ACOMPANHADAS</span><strong>{recordedExercises.size}<small>/{tafExercises.length}</small></strong><small>com ao menos uma marca</small></Card><Card className="taf-stat taf-stat-last"><span className="taf-stat-icon"><CalendarDays size={18}/></span><span className="eyebrow">ÚLTIMA TENTATIVA</span><strong className="taf-stat-date">{latest ? dateLabel(latest.measuredAt) : "—"}</strong><small>{attemptExercise?.name ?? "Registre sua primeira marca"}</small></Card></div>
     <section className="taf-progress" aria-labelledby="taf-progress-title">
       <div className="taf-progress-heading">
         <div><span className="eyebrow">SEU HISTÓRICO EM FOCO</span><h2 id="taf-progress-title"><TrendingUp size={22}/> Evolução das marcas</h2><p>Acompanhe cada resultado registrado, modalidade por modalidade.</p></div>
@@ -204,13 +243,13 @@ export default function TafPage({ data, accountId, onSave, onSaveExercise, onDel
       </div> : <div className="taf-progress-empty"><span><TrendingUp size={21}/></span><div><strong>Seu gráfico começa com a primeira marca.</strong><p>Registre um resultado na modalidade selecionada para visualizar sua evolução ao longo do tempo.</p></div></div>}
       {chartPoints.length > 0 && <p className="taf-progress-note"><Info size={13}/>{chartExercise.higherIsBetter ? "Valores maiores indicam marcas mais altas nesta modalidade." : "Nesta prova de tempo, a linha descendo representa uma marca melhor."}{chartPoints.length === 1 && " Registre outra tentativa para comparar seu progresso."}</p>}
     </section>
-    <section className="taf-library" aria-labelledby="taf-library-title"><div className="taf-section-heading"><div><span className="eyebrow">PROVAS E EXERCÍCIOS</span><h2 id="taf-library-title">Biblioteca TAF</h2></div><Field label="FILTRAR MODALIDADE"><select value={category} onChange={(event) => setCategory(event.target.value)}>{categories.map((item) => <option key={item}>{item}</option>)}</select></Field></div>{gifError && <div className="exercise-gif-storage-error" role="alert">{gifError}</div>}
+    <section className="taf-library" aria-labelledby="taf-library-title"><div className="taf-section-heading"><div><span className="eyebrow">PROVAS E EXERCÍCIOS</span><h2 id="taf-library-title">Biblioteca TAF</h2></div><div className="taf-section-actions"><Button variant="secondary" onClick={() => { setCustomError(""); setCustomOpen(true); }}><Plus size={15}/> ADICIONAR EXERCÍCIO</Button><Field label="FILTRAR MODALIDADE"><select value={category} onChange={(event) => setCategory(event.target.value)}>{categories.map((item) => <option key={item}>{item}</option>)}</select></Field></div></div>{gifError && <div className="exercise-gif-storage-error" role="alert">{gifError}</div>}
       <div className="taf-exercise-grid">{visibleExercises.map((exercise) => {
         const personalBest = getTafBest(attempts, exercise);
         const last = attempts.find((attempt) => attempt.exerciseId === exercise.id);
         return <Card className="taf-exercise-card" key={exercise.id}>
           <DemoArt exercise={exercise} overrideUrl={gifUrls[exercise.id]} uploading={gifUploading === exercise.id} onEdit={() => setEditingExercise(exercise)}/>
-          <input ref={(element) => { gifInputs.current[exercise.id] = element; }} type="file" accept="image/*,.gif" aria-label={`Escolher imagem ou GIF para ${exercise.name}`} className="exercise-gif-input" onChange={(event) => void uploadGif(exercise, event.currentTarget.files?.[0])}/>
+          <input ref={(element) => { gifInputs.current[exercise.id] = element; }} type="file" accept="image/gif,.gif" aria-label={`Escolher GIF animado para ${exercise.name}`} className="exercise-gif-input" onChange={(event) => void uploadGif(exercise, event.currentTarget.files?.[0])}/>
           <div className="taf-card-copy"><Pill tone="neutral">{exercise.category.toUpperCase()}</Pill><h3>{exercise.name}</h3><p>{exercise.purpose}</p><div className="taf-card-muscles"><Dumbbell size={14}/><span>{exercise.muscles}</span></div></div>
           <div className="taf-card-marks"><div><span className="eyebrow"><Trophy size={12}/> MELHOR MARCA</span><strong>{personalBest === null ? "—" : formatTafValue(personalBest, exercise.defaultUnit)}</strong></div>{last && <div className="taf-last-mark"><span>Última · {dateLabel(last.measuredAt)}</span><b>{formatTafValue(last.value, last.unit)}</b></div>}</div>
           <div className="taf-card-footer"><span className="taf-metric-note"><Ruler size={13}/>{exercise.metricLabel}</span><Button onClick={() => openExercise(exercise)}><Plus size={15}/> REGISTRAR MARCA</Button></div>
@@ -220,7 +259,7 @@ export default function TafPage({ data, accountId, onSave, onSaveExercise, onDel
     </section>
     <section className="taf-history" aria-labelledby="taf-history-title"><div className="taf-section-heading"><div><span className="eyebrow">HISTÓRICO PESSOAL</span><h2 id="taf-history-title">Suas últimas marcas</h2></div>{attempts.length > 8 && <span className="taf-total-note">{attempts.length} tentativas no total</span>}</div>
       {recentAttempts.length ? <div className="taf-history-list">{recentAttempts.map((attempt) => {
-        const exercise = TAF_EXERCISES.find((item) => item.id === attempt.exerciseId);
+        const exercise = tafExercises.find((item) => item.id === attempt.exerciseId);
         if (!exercise) return null;
         return <Card className="taf-history-row" key={attempt.id}><div className="taf-history-icon"><Activity size={16}/></div><div className="taf-history-copy"><strong>{exercise.name}</strong><span><CalendarDays size={12}/>{dateLabel(attempt.measuredAt)}{attempt.exam && <> · <MapPin size={12}/>{attempt.exam}</>}</span>{attempt.notes && <small>{attempt.notes}</small>}</div><strong className="taf-history-value">{formatTafValue(attempt.value, attempt.unit)}</strong></Card>;
       })}</div> : <Card className="taf-history-empty"><span><Footprints size={22}/></span><div><strong>Suas marcas começam aqui.</strong><p>Escolha uma modalidade acima para registrar uma tentativa. O acompanhamento é pessoal e separado dos treinos de musculação.</p></div></Card>}
@@ -237,5 +276,6 @@ export default function TafPage({ data, accountId, onSave, onSaveExercise, onDel
       </form>}</div>}
     </Modal>
     <ExerciseEditorModal exercise={editingExercise} gifUrl={editingExercise ? gifUrls[editingExercise.id] : undefined} gifUploading={editingExercise ? gifUploading === editingExercise.id : false} onClose={() => setEditingExercise(null)} onGifChange={(file) => editingExercise && void uploadGif(editingExercise, file)} onSave={(value) => { if (editingExercise && "metricLabel" in value) { onSaveExercise(editingExercise.id, value as TafExerciseOverride); setEditingExercise(null); } }} onDelete={() => { if (editingExercise) { onDeleteExercise(editingExercise.id); setEditingExercise(null); } }} />
+    <Modal open={customOpen} title="Adicionar exercício ao TAF" eyebrow="MODALIDADE PERSONALIZADA" onClose={() => { if (!savingCustom) { setCustomOpen(false); setCustomError(""); clearCustomGif(); } }}><form className="custom-exercise-form custom-taf-form" onSubmit={(event) => void createManualTafExercise(event)}><Field label="Nome do exercício"><input value={customName} onChange={(event) => setCustomName(event.target.value)} required maxLength={60} placeholder="Ex.: Corrida de 2.400 m"/></Field><Field label="Descrição"><textarea value={customDescription} onChange={(event) => setCustomDescription(event.target.value)} required maxLength={240} rows={3} placeholder="Descreva como você realiza esta modalidade"/></Field><div className="custom-two-cols"><Field label="Unidade da marca"><select value={customUnit} onChange={(event) => setCustomUnit(event.target.value as TafUnit)}><option value="reps">Repetições (reps)</option><option value="m">Metros (m)</option><option value="cm">Centímetros (cm)</option><option value="s">Segundos (s)</option></select></Field><Field label="Qual resultado é melhor?"><select value={customDirection} onChange={(event) => setCustomDirection(event.target.value as "higher" | "lower")}><option value="higher">Maior</option><option value="lower">Menor</option></select></Field></div><Field label="GIF animado"><input ref={customGifInput} type="file" accept="image/gif,.gif" aria-label="GIF da modalidade TAF" onChange={(event) => { setCustomGif(event.currentTarget.files?.[0] ?? null); setCustomError(""); }} required/><small>{customGif ? customGif.name : "GIF obrigatório, até 12 MB."}</small></Field>{customError && <div className="form-message error-message" role="alert">{customError}</div>}<div className="modal-actions"><Button type="button" variant="outline" disabled={savingCustom} onClick={() => { setCustomOpen(false); clearCustomGif(); setCustomError(""); }}>CANCELAR</Button><Button type="submit" disabled={savingCustom}>{savingCustom ? <LoaderCircle size={15}/> : <ImagePlus size={15}/>} {savingCustom ? "SALVANDO…" : "ADICIONAR EXERCÍCIO"}</Button></div></form></Modal>
   </div>;
 }

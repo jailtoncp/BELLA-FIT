@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { appendTafAttempt, formatTafValue, getTafBest, getTafProgressPoints, TAF_EXERCISES } from "./tafService";
+import { appendTafAttempt, createCustomTafExercise, formatTafValue, getTafBest, getTafProgressPoints, TAF_EXERCISES } from "./tafService";
 import type { TafAttempt } from "../types";
 
 const makeAttempt = (id: string, exerciseId: string, value: number, measuredAt: string, unit: TafAttempt["unit"] = "s"): TafAttempt => ({ id, exerciseId, value, measuredAt, unit });
@@ -17,6 +17,19 @@ describe("TAF performance tracking", () => {
       "rower", "distance-run", "sprint", "static-bar", "pull-up", "jump", "rope", "shuttle", "push-up",
     ]);
     expect(new Set(TAF_EXERCISES.map((exercise) => exercise.demo)).size).toBe(TAF_EXERCISES.length);
+  });
+
+  it("creates a custom modality with its selected unit and better-result direction", () => {
+    const custom = createCustomTafExercise("custom-run", "Corrida personalizada", "Distância em pista", "m", true);
+    expect(custom).toMatchObject({ id: "custom-run", name: "Corrida personalizada", purpose: "Distância em pista", defaultUnit: "m", unitLabel: "m", higherIsBetter: true, custom: true });
+    expect(getTafBest([
+      makeAttempt("short", custom.id, 1600, "2026-09-01", "m"),
+      makeAttempt("long", custom.id, 1750, "2026-09-02", "m"),
+      makeAttempt("wrong-unit", custom.id, 1900, "2026-09-03", "cm"),
+    ], custom)).toBe(1750);
+    const timeTrial = createCustomTafExercise("custom-time", "Tempo", "Duração em pista", "s", false);
+    expect(timeTrial).toMatchObject({ defaultUnit: "s", unitLabel: "s", higherIsBetter: false });
+    expect(getTafBest([makeAttempt("fast", timeTrial.id, 12.3, "2026-09-01"), makeAttempt("slow", timeTrial.id, 13, "2026-09-02")], timeTrial)).toBe(12.3);
   });
 
   it("stores attempts newest-first without changing the original array", () => {

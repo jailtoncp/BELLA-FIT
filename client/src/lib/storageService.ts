@@ -45,7 +45,7 @@ export function createInitialData(name: string, email: string): BellaData {
   return {
     version: 1,
     profile: { name, email, age: "", heightCm: "", weightKg: "", goal: DEFAULT_GOAL },
-    workouts, customExercises: [], exerciseOverrides: {}, tafExerciseOverrides: {}, hiddenExerciseIds: [], favorites: [], schedule,
+    workouts, customExercises: [], customTafExercises: [], exerciseOverrides: {}, tafExerciseOverrides: {}, hiddenExerciseIds: [], favorites: [], schedule,
     history: [],
     settings: { theme: "light", sound: false, vibration: true, restSeconds: 90, weightUnit: "kg", notifications: false },
     activeWorkout: null,
@@ -107,6 +107,7 @@ export function loadData(account: Account): BellaData {
   return {
     ...data,
     tafAttempts: Array.isArray(data.tafAttempts) ? data.tafAttempts : [],
+    customTafExercises: Array.isArray(data.customTafExercises) ? data.customTafExercises : [],
     exerciseOverrides: data.exerciseOverrides && typeof data.exerciseOverrides === "object" ? data.exerciseOverrides : {},
     tafExerciseOverrides: data.tafExerciseOverrides && typeof data.tafExerciseOverrides === "object" ? data.tafExerciseOverrides : {},
     hiddenExerciseIds: Array.isArray(data.hiddenExerciseIds) ? data.hiddenExerciseIds : [],
@@ -127,6 +128,7 @@ export function validateBackup(value: unknown): value is BackupFile {
   if (!data.profile || typeof data.profile.name !== "string" || typeof data.profile.email !== "string") return false;
   if (!data.schedule || typeof data.schedule !== "object" || !data.settings || typeof data.settings !== "object") return false;
   if ("tafAttempts" in data && (!Array.isArray(data.tafAttempts) || data.tafAttempts.some((attempt) => !attempt || typeof attempt.id !== "string" || typeof attempt.exerciseId !== "string" || typeof attempt.value !== "number" || !Number.isFinite(attempt.value) || typeof attempt.measuredAt !== "string" || !["reps", "m", "cm", "s"].includes(attempt.unit)))) return false;
+  if ("customTafExercises" in data && (!Array.isArray(data.customTafExercises) || data.customTafExercises.some((exercise) => !exercise || typeof exercise.id !== "string" || typeof exercise.name !== "string" || !exercise.name.trim() || typeof exercise.purpose !== "string" || !exercise.purpose.trim() || typeof exercise.category !== "string" || typeof exercise.muscles !== "string" || typeof exercise.metricLabel !== "string" || !["reps", "m", "cm", "s"].includes(exercise.defaultUnit) || typeof exercise.unitLabel !== "string" || typeof exercise.higherIsBetter !== "boolean" || exercise.demo !== "push-up" || exercise.custom !== true || typeof exercise.cue !== "string"))) return false;
   if (data.workouts.some((workout) => !workout || typeof workout.id !== "string" || typeof workout.title !== "string" || !Array.isArray(workout.exercises) || workout.exercises.some((exercise) => !exercise || typeof exercise.name !== "string" || !Array.isArray(exercise.sets) || exercise.sets.length > 10 || exercise.sets.some((set) => !set || typeof set.reps !== "string" || typeof set.weight !== "string")))) return false;
   if (data.history.some((session) => !session || typeof session.id !== "string" || !Array.isArray(session.performed) || typeof session.finishedAt !== "string")) return false;
   return true;
