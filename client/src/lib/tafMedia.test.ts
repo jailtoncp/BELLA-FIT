@@ -15,9 +15,8 @@ describe("TAF animated demonstrations", () => {
 
   it("keeps a verified Commons source link and visible credit on every sourced GIF", () => {
     const sourced = Object.values(TAF_MEDIA).filter((asset) => asset.kind === "sourced");
-    expect(sourced).toHaveLength(4);
+    expect(sourced).toHaveLength(3);
     expect(sourced.every((asset) => asset.source?.startsWith("https://commons.wikimedia.org/") && asset.credit)).toBe(true);
-    expect(TAF_MEDIA.jump.file).toBe("jump-real.gif");
     expect(TAF_MEDIA["push-up"].file).toBe("push-up-real.gif");
     expect(TAF_MEDIA["distance-run"].file).toBe("running.gif");
     expect(TAF_MEDIA["pull-up"].file).toBe("pull-up.gif");
@@ -25,7 +24,7 @@ describe("TAF animated demonstrations", () => {
 
   it("uses original human-like animated GIFs instead of schematic art for the remaining modalities", () => {
     const generated = Object.entries(TAF_MEDIA).filter(([, asset]) => asset.kind === "generated-human");
-    expect(generated.map(([demo]) => demo).sort()).toEqual(["rope", "rower", "shuttle", "sprint", "static-bar"]);
+    expect(generated.map(([demo]) => demo).sort()).toEqual(["jump", "rope", "rower", "shuttle", "sprint", "static-bar"]);
     expect(Object.values(TAF_MEDIA).some((asset) => asset.kind === "original")).toBe(false);
   });
 });

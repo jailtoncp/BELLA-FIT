@@ -14,14 +14,14 @@ A arte `github-pages-assets/bella-fit-training-hero.webp` foi criada para o Bell
 
 ## Demonstrações TAF
 
-O TAF mantém nove GIFs próprios para suas modalidades. Quatro usam fontes humanas publicadas e verificadas no Wikimedia Commons; cada cartão do app exibe crédito ou ligação para a origem. Os demais cinco são animações originais geradas por IA a partir de folhas de quadros estáticos, com uma personagem humana fictícia; não são fotos ou filmagens de uma pessoa real. Os GIFs sintéticos substituem os esquemas de abdominal remador, tiro curto, isometria na barra, subida em corda e shuttle run. Os GIFs e seus pôsteres estão em `github-pages-assets/taf/`.
+O TAF mantém nove GIFs próprios para suas modalidades. Três usam fontes humanas publicadas e verificadas no Wikimedia Commons; cada cartão do app exibe crédito ou ligação para a origem. Os outros seis são animações originais geradas por IA a partir de folhas de quadros estáticos, com uma personagem humana fictícia; não são fotos ou filmagens de uma pessoa real. Os GIFs sintéticos cobrem abdominal remador, tiro curto, isometria na barra, salto horizontal, subida em corda e shuttle run. Os GIFs e seus pôsteres estão em `github-pages-assets/taf/`.
 
 - **Corrida de 12 minutos:** [Running.gif](https://commons.wikimedia.org/wiki/File:Running.gif), Fengalon, domínio público conforme a página do arquivo.
 - **Barra fixa:** [Pullup.gif](https://commons.wikimedia.org/wiki/File:Pullup.gif), Extremistpullup, CC BY-SA 3.0.
-- **Salto horizontal:** [Descriptive Zoopraxography Athlete, Standing Long Jump Animated.gif](https://commons.wikimedia.org/wiki/File:Descriptive_Zoopraxography_Athlete,_Standing_Long_Jump_Animated.gif), sequência histórica de Eadweard Muybridge (1893), domínio público conforme a página do arquivo.
+- **GIF histórico legado de salto horizontal** (retido nos arquivos estáticos, não é mais mostrado como demonstração ativa): [Descriptive Zoopraxography Athlete, Standing Long Jump Animated.gif](https://commons.wikimedia.org/wiki/File:Descriptive_Zoopraxography_Athlete,_Standing_Long_Jump_Animated.gif), sequência de Eadweard Muybridge (1893), domínio público conforme a página do arquivo.
 - **Flexão de braços:** [Navy seal buds training push-ups](https://commons.wikimedia.org/wiki/File:Navy-seal-buds-training-push-ups.ogv), United States Navy SEALs, obra oficial da Marinha dos EUA indicada como domínio público nos Estados Unidos. A adaptação é um ciclo curto sem áudio; a indicação dos EUA não determina por si só o estado de direitos em toda jurisdição.
 
-Os GIFs sintéticos das cinco outras modalidades foram criados para o Bella Fit a partir de quadros estáticos gerados para esta finalidade e convertidos por `scripts/exercise-gif-from-sheet.py`. Seus arquivos se identificam com o sufixo `-human`; são demonstrações humanas ilustrativas geradas por IA, não material de uma pessoa real.
+Os GIFs sintéticos das seis modalidades foram criados para o Bella Fit a partir de quadros estáticos gerados para esta finalidade e convertidos por `scripts/exercise-gif-from-sheet.py`. Seus arquivos se identificam com o sufixo `-human`; são demonstrações humanas ilustrativas geradas por IA, não material de uma pessoa real.
 
 ## GIFs humanos gerados por IA na biblioteca
 
