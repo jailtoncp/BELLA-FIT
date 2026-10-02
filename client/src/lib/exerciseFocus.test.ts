@@ -22,4 +22,14 @@ describe("technical focus for the exercise library", () => {
     expect(EXERCISE_FOCUS["elevacao-pernas"].primaryMuscles).toContain("Iliopsoas");
     expect(EXERCISE_FOCUS["elevacao-pernas"].secondaryMuscles).toContain("Reto abdominal");
   });
+
+  it("adds three fully described cardio movements with their own demonstration GIFs", () => {
+    const cardio = EXERCISE_CATALOG.filter((exercise) => exercise.muscle === "Condicionamento");
+    expect(cardio.map((exercise) => exercise.id)).toEqual(expect.arrayContaining(["burpee", "pular-corda", "corrida-estacionaria"]));
+    for (const exercise of cardio.filter((exercise) => ["burpee", "pular-corda", "corrida-estacionaria"].includes(exercise.id))) {
+      expect(exercise.imageUrl, `${exercise.name} needs its own GIF`).toBeTruthy();
+      expect(exercise.purpose).toBeTruthy();
+      expect(exercise.primaryMuscles?.length).toBeGreaterThan(0);
+    }
+  });
 });

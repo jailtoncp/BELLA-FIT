@@ -2,51 +2,37 @@
 
 ## Demonstrações de exercícios
 
-Os 53 GIFs em `github-pages-assets/exercises/` foram produzidos a partir dos pares de imagens correspondentes a exercícios do [Free Exercise DB](https://github.com/yuhonas/free-exercise-db), conjunto que declara publicação sob a licença [The Unlicense](https://unlicense.org/). Os frames originais foram redimensionados e combinados em GIFs curtos. Os nomes e textos da interface em português são conteúdo do Bella Fit.
+Os GIFs adaptados do [Free Exercise DB](https://github.com/yuhonas/free-exercise-db) usam pares de imagens correspondentes a exercícios do conjunto, que declara publicação sob [The Unlicense](https://unlicense.org/). Os frames foram redimensionados e combinados em animações curtas; veja `scripts/exercise-gif-from-freedb.py` e os arquivos-fontes de cada exercício para reproduzir as adaptações.
 
-No preview Manus, os arquivos equivalentes continuam sendo servidos pelo armazenamento gerenciado do WebDev. No GitHub Pages, a build usa os GIFs locais incluídos neste repositório.
+No preview Manus, os arquivos ficam no armazenamento gerenciado do projeto. No GitHub Pages, a build usa cópias locais em `github-pages-assets/`.
 
-O dataset é informativo e as demonstrações não substituem orientação profissional. Consulte o repositório de origem para detalhes de proveniência.
+As demonstrações são referências visuais e não substituem orientação profissional. Consulte a descrição e siga as regras do edital do TAF, quando aplicável.
 
 ## Imagem de capa
 
 A arte `github-pages-assets/bella-fit-training-hero.webp` foi criada para o Bella Fit e é distribuída em formato WebP otimizado para o build público do GitHub Pages.
 
-## Demonstrações TAF de pessoas reais
+## Demonstrações TAF
 
-Além dos GIFs esquemáticos originais, estas duas modalidades usam versões otimizadas de demonstrações humanas verificadas no Wikimedia Commons. Cada demonstração exibe um link para sua página de origem no app.
+O TAF mantém nove GIFs próprios para suas modalidades. Quatro usam fontes humanas publicadas e verificadas no Wikimedia Commons; cada cartão do app exibe crédito ou ligação para a origem. Os demais cinco são animações originais geradas por IA a partir de folhas de quadros estáticos, com uma personagem humana fictícia; não são fotos ou filmagens de uma pessoa real. Os GIFs sintéticos substituem os esquemas de abdominal remador, tiro curto, isometria na barra, subida em corda e shuttle run. Os GIFs e seus pôsteres estão em `github-pages-assets/taf/`.
 
-- **Salto horizontal parado:** Eadweard Muybridge, *Descriptive Zoopraxography* (1893), sequência histórica de fotografias rotacionada em animação. [Arquivo-fonte e metadados](https://commons.wikimedia.org/wiki/File:Descriptive_Zoopraxography_Athlete,_Standing_Long_Jump_Animated.gif). Commons indica domínio público (PD Gutenberg/PD-Mark; domínio público nos Estados Unidos e em países/áreas cujo prazo de proteção seja vida do autor mais 100 anos ou menos). A adaptação `jump-real.gif` foi reduzida para 360 px; o arquivo original tem 1,42 MB.
-- **Flexão de braços:** United States Navy SEALs, vídeo da demonstração de técnica de push-up pelo diretor de preparo físico da Naval Special Warfare. [Arquivo-fonte e metadados](https://commons.wikimedia.org/wiki/File:Navy-seal-buds-training-push-ups.ogv). Commons identifica a obra como domínio público nos Estados Unidos (PD-USGov-Military-Navy; trabalho oficial de funcionário da Marinha dos EUA). `push-up-real.gif` reproduz um ciclo curto da demonstração, sem áudio, em 300 px e 7 fps. A classificação de domínio público da fonte dos EUA não resolve necessariamente direitos em toda jurisdição; Bella Fit mantém o link e o crédito da origem visíveis.
+- **Corrida de 12 minutos:** [Running.gif](https://commons.wikimedia.org/wiki/File:Running.gif), Fengalon, domínio público conforme a página do arquivo.
+- **Barra fixa:** [Pullup.gif](https://commons.wikimedia.org/wiki/File:Pullup.gif), Extremistpullup, CC BY-SA 3.0.
+- **Salto horizontal:** [Descriptive Zoopraxography Athlete, Standing Long Jump Animated.gif](https://commons.wikimedia.org/wiki/File:Descriptive_Zoopraxography_Athlete,_Standing_Long_Jump_Animated.gif), sequência histórica de Eadweard Muybridge (1893), domínio público conforme a página do arquivo.
+- **Flexão de braços:** [Navy seal buds training push-ups](https://commons.wikimedia.org/wiki/File:Navy-seal-buds-training-push-ups.ogv), United States Navy SEALs, obra oficial da Marinha dos EUA indicada como domínio público nos Estados Unidos. A adaptação é um ciclo curto sem áudio; a indicação dos EUA não determina por si só o estado de direitos em toda jurisdição.
 
-Os metadados do Commons registram `AttributionRequired=false` para ambos, mas Bella Fit mantém crédito informativo e links para os autores/fontes. O script `scripts/optimize-taf-human-gifs.sh` reproduz os recortes e as versões leves a partir das URLs de origem. Nenhum candidato sem licença verificável ou incompatível com o movimento do teste foi adotado.
+Os GIFs sintéticos das cinco outras modalidades foram criados para o Bella Fit a partir de quadros estáticos gerados para esta finalidade e convertidos por `scripts/exercise-gif-from-sheet.py`. Seus arquivos se identificam com o sufixo `-human`; são demonstrações humanas ilustrativas geradas por IA, não material de uma pessoa real.
 
-# GIFs de exercícios adicionados
+## GIFs humanos gerados por IA na biblioteca
 
-Os GIFs locais abaixo foram obtidos da Wikimedia Commons e redistribuídos conforme as páginas de licença em Creative Commons:
+`levantamento-terra.gif`, `flexao.gif` e `step-up.gif` substituem as demonstrações esquemáticas ou não humanas anteriores por animações originais de aparência humana, geradas a partir de folhas de quatro poses. `burpee.gif`, `pular-corda.gif` e `corrida-estacionaria.gif` são novas demonstrações para o grupo Cardio. Todos mostram a mesma personagem fictícia, têm seis quadros, foram reduzidos para 320 × 180 px e otimizados para menos de 1 MB. São ilustrações realistas geradas por IA, não fotos ou filmagens de pessoas reais. As folhas de geração são insumos temporários do ambiente; o conversor reproduzível está em `scripts/exercise-gif-from-sheet.py` e os GIFs entregues ficam em `github-pages-assets/`.
 
-- `levantamento-terra.gif`: [Man Lifting Barbell Deadlift GIF Animation Loop](https://commons.wikimedia.org/wiki/File:Man_Lifting_Barbell_Deadlift_GIF_Animation_Loop.gif), autor VideoPlasty, CC BY-SA 4.0.
-- `flexao.gif`: [Man Doing Push Ups GIF Animation Loop](https://commons.wikimedia.org/wiki/File:Man_Doing_Push_Ups_GIF_Animation_Loop.gif), autor VideoPlasty, CC BY-SA 4.0.
-- `barra-fixa.gif`: [Pullup.gif](https://commons.wikimedia.org/wiki/File:Pullup.gif), autor Extremistpullup, CC BY-SA 3.0 / GFDL 1.2+.
-- `polichinelo.gif`: [Jumpingjacks.gif](https://commons.wikimedia.org/wiki/File:Jumpingjacks.gif), autor Wensceslao, CC BY-SA 4.0.
+## Outras demonstrações com origem licenciada
 
-## Demonstrações externas adicionadas à biblioteca
-
-Estas cinco demonstrações são carregadas diretamente do Wikimedia Commons para exercícios que ainda não tinham mídia no Bella Fit. A aplicação mantém a URL da fonte no código para permitir rastreabilidade e não duplica os arquivos binários no repositório.
-
-- **Agachamento frontal:** [Zecher-squats-2.gif](https://commons.wikimedia.org/wiki/File:Zecher-squats-2.gif), autor Everkinetic, CC BY-SA 3.0. É uma variação de front squat/Zecher squat; serve como referência visual do padrão de agachamento frontal.
-- **Step-up:** [Step up — CDC strength training for older adults](https://commons.wikimedia.org/wiki/File:Step_up-CDC_strength_training_for_older_adults.gif), Centers for Disease Control and Prevention, domínio público nos EUA.
-- **Flexão:** [Pushups wbs.gif](https://commons.wikimedia.org/wiki/File:Pushups_wbs.gif), autor Wensceslao, CC BY-SA 4.0.
-- **Abdominal/sit-up:** [Situps.gif](https://commons.wikimedia.org/wiki/File:Situps.gif), Wikimedia Commons; licença indicada na página do arquivo.
+- **Barra fixa na biblioteca:** [Pullup.gif](https://commons.wikimedia.org/wiki/File:Pullup.gif), autor Extremistpullup, CC BY-SA 3.0 / GFDL 1.2+.
+- **Polichinelo:** [Jumpingjacks.gif](https://commons.wikimedia.org/wiki/File:Jumpingjacks.gif), autor Wensceslao, CC BY-SA 4.0.
+- **Agachamento frontal:** [Zecher-squats-2.gif](https://commons.wikimedia.org/wiki/File:Zecher-squats-2.gif), autor Everkinetic, CC BY-SA 3.0; referência visual de uma variação de agachamento frontal.
+- **Abdominal/sit-up:** [Situps.gif](https://commons.wikimedia.org/wiki/File:Situps.gif); consulte a página do arquivo para autor e licença.
 - **Agachamento unilateral:** [One-leg-squat-1.gif](https://commons.wikimedia.org/wiki/File:One-leg-squat-1.gif), autor Everkinetic, CC BY-SA 3.0.
 
-## Demonstrações adicionais de movimentos
-
-Os GIFs `abducao-elastico.gif`, `agachamento-bulgaro.gif`, `agachamento-frontal.gif`, `agachamento-goblet.gif`, `mesa-flexora.gif`, `kickback-elastico.gif`, `glute-bridge-elastico.gif`, `good-morning.gif`, `terra-sumo.gif`, `panturrilha-sentado.gif`, `panturrilha-unilateral.gif`, `pullover-cabo.gif`, `puxada-neutra.gif`, `remada-maquina.gif`, `face-pull.gif`, `supino-maquina.gif` e `flexao-inclinada.gif` são GIFs originais produzidos para o Bella Fit a partir de folhas de quadros geradas por IA. A atleta é uma personagem fictícia com aparência humana realista; os quadros não são fotografia ou filmagem de uma pessoa real. As folhas foram convertidas em GIFs de seis quadros, redimensionados e otimizados para menos de 1 MB por arquivo. O script reproduzível está em `scripts/exercise-gif-from-sheet.py`.
-- `step-up.gif`: [Step up—CDC strength training for older adults](https://commons.wikimedia.org/wiki/File:Step_up-CDC_strength_training_for_older_adults.gif), Centers for Disease Control and Prevention (CDC), obra do governo federal dos Estados Unidos em domínio público. O crédito é informativo e não é exigido pela licença; [base de direitos governamentais dos EUA](https://www.usa.gov/government-works).
-
-Os 19 GIFs adicionais (`encolhimento.gif`, `supino-inclinado.gif`, `crucifixo-maquina.gif`, `desenvolvimento-maquina.gif`, `elevacao-lateral-cabo.gif`, `posterior-maquina.gif`, `rosca-scott.gif`, `rosca-cabo.gif`, `triceps-corda.gif`, `triceps-coice.gif`, `mergulho-banco.gif`, `abdominal-cabo.gif`, `abdominal-roda.gif`, `dead-bug.gif`, `mountain-climber.gif`, `caminhada-elastico.gif`, `rosca-elastico.gif`, `prancha-lateral.gif` e `levantamento-lateral-caneleira.gif`) usam pares de imagens com o mesmo nome de exercício no Free Exercise DB. A licença declarada para o conjunto é The Unlicense; as adaptações estão em 320 × 240 px e abaixo de 1 MB. O conversor reproduzível está em `scripts/exercise-gif-from-freedb.py`. A variação “rosca com elástico” usa a demonstração de rosca com barra EZ e faixa elástica.
-
 O GIF `bird-dog.gif` alterna três posições bilaterais fotografadas por PTPioneer. As fotos originais foram publicadas no Wikimedia Commons sob [CC BY 2.0](https://creativecommons.org/licenses/by/2.0/): [Bird dog exercise](https://commons.wikimedia.org/wiki/File:Bird_dog_exercise.jpg), [Bird dog yoga pose](https://commons.wikimedia.org/wiki/File:Girl_doing_bird_dog_yoga_pose.jpg) e [Bird dog yoga pose 2](https://commons.wikimedia.org/wiki/File:Girl_doing_bird_dog_yoga_pose_2.jpg). O Bella Fit redimensiona e combina as fotos num GIF leve; a animação alterna poses estáticas e não é um vídeo nem uma captura contínua de movimento.
-
-Os GIFs externos foram escolhidos por apresentarem o movimento em loop e por terem uma página de licença/proveniência verificável. Eles são demonstrações visuais de referência e não substituem orientação profissional.

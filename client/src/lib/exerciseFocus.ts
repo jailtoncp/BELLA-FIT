@@ -180,4 +180,19 @@ export const EXERCISE_FOCUS = {
     primaryMuscles: ["Iliopsoas", "Reto femoral (auxilia na flexão do quadril)"],
     secondaryMuscles: ["Reto abdominal", "Oblíquos interno e externo (estabilização lombo-pélvica)"],
   },
+  burpee: {
+    purpose: "Transição dinâmica entre agachamento e apoio frontal; aumenta a demanda cardiorrespiratória e envolve força e coordenação de corpo inteiro.",
+    primaryMuscles: ["Quadríceps", "Glúteo máximo", "Peitoral maior"],
+    secondaryMuscles: ["Tríceps braquial", "Deltoides", "Abdômen (estabilização)", "Panturrilhas"],
+  },
+  "pular-corda": {
+    purpose: "Saltos cíclicos de baixo deslocamento com rotação da corda; treina resistência cardiorrespiratória, ritmo e coordenação.",
+    primaryMuscles: ["Panturrilhas", "Quadríceps"],
+    secondaryMuscles: ["Glúteos", "Deltoides e antebraços (rotação da corda)", "Core (estabilização)"],
+  },
+  "corrida-estacionaria": {
+    purpose: "Corrida no mesmo lugar com elevação alternada dos joelhos; estimula a capacidade cardiorrespiratória e a coordenação dos membros.",
+    primaryMuscles: ["Quadríceps", "Glúteos", "Flexores do quadril"],
+    secondaryMuscles: ["Isquiotibiais", "Panturrilhas", "Abdômen (estabilização do tronco)"],
+  },
 } satisfies Record<string, ExerciseFocus>;
