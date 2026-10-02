@@ -14,10 +14,10 @@ A arte `github-pages-assets/bella-fit-training-hero.webp` foi criada para o Bell
 
 ## Demonstrações TAF
 
-O TAF mantém nove GIFs próprios para suas modalidades. Três usam fontes humanas publicadas e verificadas no Wikimedia Commons; cada cartão do app exibe crédito ou ligação para a origem. Os outros seis são animações originais geradas por IA a partir de folhas de quadros estáticos, com uma personagem humana fictícia; não são fotos ou filmagens de uma pessoa real. Os GIFs sintéticos cobrem abdominal remador, tiro curto, isometria na barra, salto horizontal, subida em corda e shuttle run. Os GIFs e seus pôsteres estão em `github-pages-assets/taf/`.
+O TAF mantém nove GIFs próprios para suas modalidades. Dois usam fontes humanas publicadas e verificadas no Wikimedia Commons; cada cartão do app exibe crédito ou ligação para a origem. Os outros sete são animações originais geradas por IA a partir de folhas de quadros estáticos, com uma personagem humana fictícia; não são fotos ou filmagens de uma pessoa real. Os GIFs sintéticos cobrem abdominal remador, tiro curto, isometria na barra, salto horizontal, barra fixa, subida em corda e shuttle run. Os GIFs e seus pôsteres estão em `github-pages-assets/taf/`.
 
 - **Corrida de 12 minutos:** [Running.gif](https://commons.wikimedia.org/wiki/File:Running.gif), Fengalon, domínio público conforme a página do arquivo.
-- **Barra fixa:** [Pullup.gif](https://commons.wikimedia.org/wiki/File:Pullup.gif), Extremistpullup, CC BY-SA 3.0.
+- **GIF legado de barra fixa** (mantido como arquivo, mas não é mais a demonstração ativa): [Pullup.gif](https://commons.wikimedia.org/wiki/File:Pullup.gif), Extremistpullup, CC BY-SA 3.0.
 - **GIF histórico legado de salto horizontal** (retido nos arquivos estáticos, não é mais mostrado como demonstração ativa): [Descriptive Zoopraxography Athlete, Standing Long Jump Animated.gif](https://commons.wikimedia.org/wiki/File:Descriptive_Zoopraxography_Athlete,_Standing_Long_Jump_Animated.gif), sequência de Eadweard Muybridge (1893), domínio público conforme a página do arquivo.
 - **Flexão de braços:** [Navy seal buds training push-ups](https://commons.wikimedia.org/wiki/File:Navy-seal-buds-training-push-ups.ogv), United States Navy SEALs, obra oficial da Marinha dos EUA indicada como domínio público nos Estados Unidos. A adaptação é um ciclo curto sem áudio; a indicação dos EUA não determina por si só o estado de direitos em toda jurisdição.
 
@@ -25,12 +25,12 @@ Os GIFs sintéticos das seis modalidades foram criados para o Bella Fit a partir
 
 ## GIFs humanos gerados por IA na biblioteca
 
-`levantamento-terra.gif`, `flexao.gif` e `step-up.gif` substituem as demonstrações esquemáticas ou não humanas anteriores por animações originais de aparência humana, geradas a partir de folhas de quatro poses. `burpee.gif`, `pular-corda.gif` e `corrida-estacionaria.gif` são novas demonstrações para o grupo Cardio. Todos mostram a mesma personagem fictícia, têm seis quadros, foram reduzidos para 320 × 180 px e otimizados para menos de 1 MB. São ilustrações realistas geradas por IA, não fotos ou filmagens de pessoas reais. As folhas de geração são insumos temporários do ambiente; o conversor reproduzível está em `scripts/exercise-gif-from-sheet.py` e os GIFs entregues ficam em `github-pages-assets/`.
+`levantamento-terra.gif`, `flexao.gif`, `step-up.gif`, `barra-fixa.gif` e `polichinelo.gif` são demonstrações originais de aparência humana, geradas a partir de folhas de poses. `burpee.gif`, `pular-corda.gif` e `corrida-estacionaria.gif` são novas demonstrações para o grupo Cardio. Todas mostram a mesma personagem fictícia, têm seis quadros e ficam abaixo de 1 MB; dimensões variam conforme o enquadramento. São ilustrações realistas geradas por IA, não fotos ou filmagens de pessoas reais. As folhas de geração são insumos temporários do ambiente; o conversor reproduzível está em `scripts/exercise-gif-from-sheet.py` e os GIFs entregues ficam em `github-pages-assets/`.
 
 ## Outras demonstrações com origem licenciada
 
-- **Barra fixa na biblioteca:** [Pullup.gif](https://commons.wikimedia.org/wiki/File:Pullup.gif), autor Extremistpullup, CC BY-SA 3.0 / GFDL 1.2+.
-- **Polichinelo:** [Jumpingjacks.gif](https://commons.wikimedia.org/wiki/File:Jumpingjacks.gif), autor Wensceslao, CC BY-SA 4.0.
+- **GIF legado de barra fixa na biblioteca** (não mais usado): [Pullup.gif](https://commons.wikimedia.org/wiki/File:Pullup.gif), autor Extremistpullup, CC BY-SA 3.0 / GFDL 1.2+.
+- **GIF legado de polichinelo** (substituído pela animação humana original e não mais usado): [Jumpingjacks.gif](https://commons.wikimedia.org/wiki/File:Jumpingjacks.gif), autor Wensceslao, CC BY-SA 4.0.
 - **Agachamento frontal:** [Zecher-squats-2.gif](https://commons.wikimedia.org/wiki/File:Zecher-squats-2.gif), autor Everkinetic, CC BY-SA 3.0; referência visual de uma variação de agachamento frontal.
 - **Abdominal/sit-up:** [Situps.gif](https://commons.wikimedia.org/wiki/File:Situps.gif); consulte a página do arquivo para autor e licença.
 - **Agachamento unilateral:** [One-leg-squat-1.gif](https://commons.wikimedia.org/wiki/File:One-leg-squat-1.gif), autor Everkinetic, CC BY-SA 3.0.

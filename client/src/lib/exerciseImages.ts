@@ -55,8 +55,8 @@ const manuscriptImages: Record<string, string> = {
   "flexao-inclinada": "/manus-storage/flexao-inclinada_1bb83ada.gif",
   "levantamento-terra": "/manus-storage/levantamento-terra_04bec520.gif",
   flexao: "/manus-storage/flexao_fbcaa5a4.gif",
-  "barra-fixa": "/manus-storage/barra-fixa_5b565996.gif",
-  polichinelo: "/manus-storage/polichinelo_82b4ffe4.gif",
+  "barra-fixa": "/manus-storage/pull-up-human_ec27400a.gif",
+  polichinelo: "/manus-storage/polichinelo_019b1062.gif",
 
   // Demonstrações externas correspondentes ao movimento.
   "abdominal-sit-up": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Situps.gif",
