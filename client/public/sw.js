@@ -1,4 +1,4 @@
-const CACHE_NAME = "bella-fit-shell-v3";
+const CACHE_NAME = "bella-fit-shell-v4";
 const BASE_PATH = new URL("./", self.location.href).pathname;
 const IS_GITHUB_PAGES = BASE_PATH === "/BELLA-FIT/";
 const appUrl = (path) => `${BASE_PATH}${path}`;
@@ -14,7 +14,7 @@ const EXERCISE_NAMES = [
   "desenvolvimento", "elevacao-frontal", "elevacao-lateral", "elevacao-pelvica", "elevacao-pernas", "extensora",
   "flexora", "glute-bridge", "hack", "hip-thrust", "leg-press", "panturrilha", "passada", "prancha",
   "puxada-frontal", "remada-baixa", "remada-curvada", "remada-unilateral", "rosca-alternada", "rosca-direta",
-  "rosca-martelo", "stiff", "supino", "triceps-frances", "triceps-pulley", "triceps-testa",
+  "rosca-martelo", "stiff", "supino", "triceps-frances", "triceps-pulley", "triceps-testa", "barra-fixa", "polichinelo",
 ];
 const MANUS_EXERCISES = [
   "abdominal_41ec89d4", "abducao_dc306907", "afundo_4f017c1d", "agachamento-sumo_2adf4d00",
@@ -33,28 +33,62 @@ const EXERCISE_ASSETS = IS_GITHUB_PAGES
 const HERO_ASSET = IS_GITHUB_PAGES
   ? appUrl("media/bella-fit-training-hero.webp")
   : "/manus-storage/bella-fit-training-hero_303e3ce8.jpg";
+const REFRESHED_DEMO_ASSETS = IS_GITHUB_PAGES
+  ? [
+      appUrl("media/exercises/barra-fixa.gif"),
+      appUrl("media/exercises/polichinelo.gif"),
+      appUrl("media/taf/pull-up-human.gif"),
+      appUrl("media/taf/pull-up-human-poster.webp"),
+    ]
+  : [
+      "/manus-storage/pull-up-human_ec27400a.gif",
+      "/manus-storage/pull-up-human-poster_bb254343.webp",
+      "/manus-storage/polichinelo_019b1062.gif",
+    ];
 
 self.addEventListener("install", (event) => {
   event.waitUntil((async () => {
     const cache = await caches.open(CACHE_NAME);
     await cache.addAll(APP_SHELL);
-    await Promise.all([...EXERCISE_ASSETS, HERO_ASSET].map((asset) => cache.add(asset).catch(() => undefined)));
+    await Promise.all([...EXERCISE_ASSETS, ...REFRESHED_DEMO_ASSETS, HERO_ASSET].map((asset) => cache.add(asset).catch(() => undefined)));
+    await Promise.all(REFRESHED_DEMO_ASSETS.map(async (asset) => {
+      try {
+        const response = await fetch(new Request(asset, { cache: "reload" }));
+        if (response.ok) await cache.put(asset, response);
+      } catch {
+        /* O PWA ainda poderá obter o asset ao ficar online novamente. */
+      }
+    }));
     await self.skipWaiting();
   })());
 });
 
 self.addEventListener("activate", (event) => {
-  event.waitUntil(
-    caches.keys()
-      .then((names) => Promise.all(names.filter((name) => name.startsWith("bella-fit-") && name !== CACHE_NAME).map((name) => caches.delete(name))))
-      .then(() => self.clients.claim()),
-  );
+  event.waitUntil((async () => {
+    const staleCaches = (await caches.keys()).filter((name) => name.startsWith("bella-fit-") && name !== CACHE_NAME);
+    await Promise.all(staleCaches.map((name) => caches.delete(name)));
+    await self.clients.claim();
+  })());
 });
 
 self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") return;
   const requestUrl = new URL(event.request.url);
+  if (requestUrl.protocol !== "http:" && requestUrl.protocol !== "https:") return;
   if (requestUrl.origin !== self.location.origin) return;
+
+  if (event.request.destination === "image") {
+    event.respondWith((async () => {
+      try {
+        const response = await fetch(event.request, { cache: "reload" });
+        if (response?.ok) await caches.open(CACHE_NAME).then((cache) => cache.put(event.request, response.clone()));
+        return response;
+      } catch {
+        return (await caches.match(event.request)) || Response.error();
+      }
+    })());
+    return;
+  }
 
   if (event.request.mode === "navigate") {
     event.respondWith(fetch(event.request).then((response) => {

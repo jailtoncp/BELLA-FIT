@@ -3,9 +3,17 @@ import App from "./App";
 import "./index.css";
 
 if ("serviceWorker" in navigator) {
+  let reloadingForWorkerUpdate = false;
+  navigator.serviceWorker.addEventListener("controllerchange", () => {
+    if (reloadingForWorkerUpdate) return;
+    reloadingForWorkerUpdate = true;
+    window.location.reload();
+  });
   window.addEventListener("load", () => {
     const baseUrl = import.meta.env.BASE_URL;
-    navigator.serviceWorker.register(`${baseUrl}sw.js`, { scope: baseUrl }).catch((error) => console.warn("Bella Fit: não foi possível registrar o modo offline", error));
+    navigator.serviceWorker.register(`${baseUrl}sw.js`, { scope: baseUrl, updateViaCache: "none" })
+      .then((registration) => registration.update())
+      .catch((error) => console.warn("Bella Fit: não foi possível registrar o modo offline", error));
   });
 }
 
