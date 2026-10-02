@@ -1,4 +1,4 @@
-const CACHE_NAME = "bella-fit-shell-v4";
+const CACHE_NAME = "bella-fit-shell-v5";
 const BASE_PATH = new URL("./", self.location.href).pathname;
 const IS_GITHUB_PAGES = BASE_PATH === "/BELLA-FIT/";
 const appUrl = (path) => `${BASE_PATH}${path}`;
@@ -39,11 +39,15 @@ const REFRESHED_DEMO_ASSETS = IS_GITHUB_PAGES
       appUrl("media/exercises/polichinelo.gif"),
       appUrl("media/taf/pull-up-human.gif"),
       appUrl("media/taf/pull-up-human-poster.webp"),
+      appUrl("media/taf/distance-run-human.gif"),
+      appUrl("media/taf/distance-run-human-poster.webp"),
     ]
   : [
       "/manus-storage/pull-up-human_ec27400a.gif",
       "/manus-storage/pull-up-human-poster_bb254343.webp",
       "/manus-storage/polichinelo_019b1062.gif",
+      "/manus-storage/distance-run-human_fb0eb89e.gif",
+      "/manus-storage/distance-run-human-poster_4c397fe0.webp",
     ];
 
 self.addEventListener("install", (event) => {

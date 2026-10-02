@@ -229,7 +229,7 @@ def save_gif(name: str) -> tuple[str,int]:
 
 def save_reduced_motion_posters() -> None:
     """Create static WebP first-frame posters for every looping GIF."""
-    for name in ("rower","running","sprint","static-bar","pull-up","jump","rope","shuttle","push-up"):
+    for name in ("rower","running","sprint","static-bar","pull-up","jump","rope","shuttle","push-up","distance-run-human"):
         source=Image.open(OUT/f"{name}.gif")
         source.seek(0)
         frame=source.convert("RGB")

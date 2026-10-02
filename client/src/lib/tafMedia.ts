@@ -19,7 +19,7 @@ export interface TafMediaAsset {
  */
 export const TAF_MEDIA: Record<TafDemoKind, TafMediaAsset> = {
   rower: { file: "rower-human.gif", posterFile: "rower-human-poster.webp", storageFile: "rower-human_80144c23.gif", posterStorageFile: "rower-human-poster_4d9ee3ef.webp", kind: "generated-human" },
-  "distance-run": { file: "running.gif", posterFile: "running-poster.webp", storageFile: "running-optimized_f290e3b5.gif", posterStorageFile: "running-poster_a89c6a90.webp", kind: "sourced", source: "https://commons.wikimedia.org/wiki/File:Running.gif", credit: "Fengalon · domínio público" },
+  "distance-run": { file: "distance-run-human.gif", posterFile: "distance-run-human-poster.webp", storageFile: "distance-run-human_fb0eb89e.gif", posterStorageFile: "distance-run-human-poster_4c397fe0.webp", kind: "generated-human" },
   sprint: { file: "sprint-human.gif", posterFile: "sprint-human-poster.webp", storageFile: "sprint-human_195b2e6d.gif", posterStorageFile: "sprint-human-poster_ad646626.webp", kind: "generated-human" },
   "static-bar": { file: "static-bar-human.gif", posterFile: "static-bar-human-poster.webp", storageFile: "static-bar-human_dceace77.gif", posterStorageFile: "static-bar-human-poster_1fe50aa8.webp", kind: "generated-human" },
   "pull-up": { file: "pull-up-human.gif", posterFile: "pull-up-human-poster.webp", storageFile: "pull-up-human_ec27400a.gif", posterStorageFile: "pull-up-human-poster_bb254343.webp", kind: "generated-human" },
