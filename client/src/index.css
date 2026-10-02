@@ -506,8 +506,11 @@ kbd { padding: 2px 5px; border: 1px solid var(--line); border-radius: 5px; color
 .day-picker, .color-picker { display: flex; align-items: center; gap: 7px; }
 .day-pill { min-width: 38px; height: 30px; border: 1px solid var(--line-strong); border-radius: 8px; background: var(--white); color: #958a90; font-size: 8px; font-weight: 700; cursor: pointer; }
 .day-pill.selected { border-color: #edcad8; color: var(--rose-deep); background: var(--rose-soft); }
-.color-option { width: 21px; height: 21px; border: 2px solid transparent; border-radius: 50%; cursor: pointer; }
-.color-option.chosen { outline: 2px solid var(--white); box-shadow: 0 0 0 2px var(--rose); }
+.color-option { flex: 0 0 auto; width: 36px; height: 36px; padding: 0; border: 2px solid transparent; border-radius: 50%; cursor: pointer; transition: transform 140ms var(--ease-out), box-shadow 140ms var(--ease-out); }
+.color-option:hover { transform: scale(1.08); }
+.color-option:active { transform: scale(.94); }
+.color-option:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+.color-option.chosen { outline: 2px solid var(--white); outline-offset: 1px; box-shadow: 0 0 0 3px var(--rose); }
 .exercise-editor-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 11px; margin: 24px 0 12px; }
 .exercise-editor-heading h2 { display: flex; align-items: center; gap: 8px; margin: 4px 0 0; font-family: "Playfair Display",Georgia,serif; font-size: 24px; font-weight: 500; }
 .exercise-editor-heading h2 span { width: 21px; height: 21px; display: grid; place-items: center; border-radius: 50%; color: var(--rose-deep); background: var(--rose-soft); font-family: "DM Sans",sans-serif; font-size: 9px; }
@@ -1163,7 +1166,7 @@ kbd { padding: 2px 5px; border: 1px solid var(--line); border-radius: 5px; color
   .field-caption { font-size: 10px; }
   .day-picker { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 5px; }
   .day-pill { min-width: 0; width: 100%; height: 42px; font-size: 10px; }
-  .color-option { width: 30px; height: 30px; }
+  .color-option { width: 44px; height: 44px; }
   .exercise-editor-top { gap: 7px; }
   .exercise-order button { width: 28px; height: 40px; }
   .exercise-order > span { font-size: 17px; }
