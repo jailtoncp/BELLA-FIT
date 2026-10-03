@@ -1,4 +1,4 @@
-const CACHE_NAME = "bella-fit-shell-v5";
+const CACHE_NAME = "bella-fit-shell-v6";
 const BASE_PATH = new URL("./", self.location.href).pathname;
 const IS_GITHUB_PAGES = BASE_PATH === "/BELLA-FIT/";
 const appUrl = (path) => `${BASE_PATH}${path}`;

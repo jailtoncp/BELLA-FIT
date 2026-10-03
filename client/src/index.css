@@ -1539,3 +1539,21 @@ kbd { padding: 2px 5px; border: 1px solid var(--line); border-radius: 5px; color
 .coach-audio-note { display: block; padding: 10px 18px 15px; color: var(--muted); font-size: 8px; text-align: center; }
 @media (max-width: 850px) { .coach-layout { grid-template-columns: 1fr; } .coach-aside { display: grid; grid-template-columns: minmax(0,1.2fr) minmax(180px,.8fr); } }
 @media (max-width: 560px) { .coach-status { font-size: 7px; } .coach-aside { display: flex; } .coach-identity { padding: 20px 17px; } .coach-chat-card { min-height: calc(100dvh - 250px); } .coach-chat-header { padding: 17px; } .coach-messages { min-height: 340px; padding: 17px 14px; } .coach-suggestions { padding: 0 14px 12px; } .coach-message-row { max-width: 96%; } .coach-message p { font-size: 12px; } .coach-composer { margin: 0 10px; } }
+
+
+/* Assinatura de autenticidade solicitada pelo proprietário. */
+.owner-authenticity-footer {
+  display: grid;
+  place-items: center;
+  padding: 28px 18px calc(28px + env(safe-area-inset-bottom));
+  background: #f1f1f1;
+  color: #686868;
+  text-align: center;
+}
+.owner-authenticity-footer p {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: clamp(14px, 2.5vw, 19px);
+  font-weight: 400;
+  line-height: 1.4;
+}
