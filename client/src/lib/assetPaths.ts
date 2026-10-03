@@ -1,3 +1,5 @@
+import { LOCAL_EXERCISE_ASSETS } from "./localExerciseAssets";
+
 const BASE_URL = import.meta.env.BASE_URL;
 const isGitHubPagesBuild = BASE_URL === "/BELLA-FIT/";
 
