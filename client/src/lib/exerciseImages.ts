@@ -180,7 +180,7 @@ const manuscriptImages: Record<string, string> = {
   "push-press-crossfit": "https://cdn.jsdelivr.net/gh/JahelCuadrado/ExerciseGymGifsDB@main/delts/dumbbell-push-press.gif",
   "landmine-unilateral-ombro": "/exercises/landmine-unilateral-ombro.gif",
   "supino-landmine-ajoelhado": "https://cdn.jsdelivr.net/gh/JahelCuadrado/ExerciseGymGifsDB@v1.1.0/delts/landmine-lateral-raise.gif",
-  "battle-rope-alternating": "data:image/gif;base64,PLACEHOLDER",
+  "battle-rope-alternating": "https://cdn.jsdelivr.net/gh/JahelCuadrado/ExerciseGymGifsDB@main/delts/battling-ropes.gif",
   "box-jump-crossfit": "/exercises/box-jump-crossfit.gif",
   "box-jump-over-crossfit": "/exercises/box-jump-crossfit.gif",
   "lateral-box-jump-crossfit": "/exercises/box-jump-crossfit.gif",
