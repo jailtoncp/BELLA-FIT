@@ -12,8 +12,19 @@ export const HERO_IMAGE_URL = isGitHubPagesBuild
   : "/manus-storage/bella-fit-training-hero_303e3ce8.jpg";
 
 export function exerciseImageUrl(_key: string, manuscriptUrl: string): string {
-  // Exercise GIFs are hosted by their configured source URL.
-  // GitHub Pages must not rewrite them to /media/exercises unless the binary
-  // file actually exists in the repository.
-  return manuscriptUrl.startsWith("/exercises/") ? appAssetUrl(manuscriptUrl) : manuscriptUrl;
+  if (!isGitHubPagesBuild) return manuscriptUrl;
+
+  if (manuscriptUrl.startsWith("/exercises/")) {
+    const filename = manuscriptUrl.replace(/^\/exercises\//, "");
+    return appAssetUrl(`media/exercises/${filename}`);
+  }
+
+  if (manuscriptUrl.startsWith("/manus-storage/")) {
+    const filename = manuscriptUrl
+      .replace(/^\/manus-storage\//, "")
+      .replace(/_[a-f0-9]+(?=\.gif$)/i, "");
+    return appAssetUrl(`media/exercises/${filename}`);
+  }
+
+  return manuscriptUrl;
 }
