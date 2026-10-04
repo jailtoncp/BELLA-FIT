@@ -15,5 +15,5 @@ export function exerciseImageUrl(_key: string, manuscriptUrl: string): string {
   // Exercise GIFs are hosted by their configured source URL.
   // GitHub Pages must not rewrite them to /media/exercises unless the binary
   // file actually exists in the repository.
-  return manuscriptUrl;
+  return manuscriptUrl.startsWith("/exercises/") ? appAssetUrl(manuscriptUrl) : manuscriptUrl;
 }
